@@ -1,9 +1,10 @@
 library(shiny)
 library(RODBCext) #https://stackoverflow.com/questions/44502558/insert-multiple-rows-from-r-dataframe-into-oracle-database
+library(shinythemes)
+library(RODBC)
 
 connHandle <- odbcConnect("ORA_XE", uid="SYSTEM", pwd="1234")
 query <- "INSERT INTO RESPONSES (FIRST_NAME, LAST_NAME, IN_TIME, OUT_TIME, SYSTEM) VALUES (?, ?, ?, ?, ?)"
-#sqlExecute(connHandle, query, data)
 
 # which fields get saved
 fieldsAll <-  c("First_Name", "Last_Name", "In_Time", "Out_Time", "System")
@@ -60,18 +61,18 @@ body { background: #fcfcfc; }
 
 
 shinyApp(
-  ui = fluidPage(
+  ui = fluidPage(theme = shinytheme("sandstone"),
     
     navbarPage(
-      tabPanel("Navbar 0", "Employee Performance"),
+      tabPanel("Navbar 0", "Performance Dashboard"),
     tabPanel(
       "Data Entry",
       shinyjs::useShinyjs(),
       shinyjs::inlineCSS(appCSS),
-      fluidRow(column(4),
+      fluidRow(column(1),
                column(6,
                       h2(
-                        'Global Travel Experts'
+                        'Employee Login Details'
                       ))),
       
       fluidRow(
@@ -80,7 +81,6 @@ shinyApp(
         column(
           4,
           div(
-            h3("Employee Login Info : "),
             id = "form",
             textInput("First_Name", labelMandatory("First Name"), ""),
             textInput("Last_Name", labelMandatory("Last Name")),
@@ -112,8 +112,8 @@ shinyApp(
                uiOutput("adminPanelContainer"))
       )
     ),
-    tabPanel("Performance Reports", "Performance Reports"),
-    tabPanel("Data Visualisation", "Data Visualisation")
+    tabPanel("Reports", "Performance Reports"),
+    tabPanel("Visualisation", "Data Visualisation")
   )),
   
   
@@ -179,12 +179,11 @@ shinyApp(
       
       div(
         id = "adminPanel",
-        h3("Attendance : "),
-        downloadButton("downloadBtn", "Download Attendance"),
         br(),
         br(),
         DT::dataTableOutput("responsesTable"),
-        br()
+        br(),
+        downloadButton("downloadBtn", "Download Attendance")
       )
     })
     
@@ -193,12 +192,14 @@ shinyApp(
       is.null(session$user) || session$user %in% adminUsers
     })
     
+    # if (input$submit) {
+    #   output$responsesTable <- DT::renderDataTable(
+    #     DT::datatable(sqlQuery(channel, "SELECT * FROM responses"), options = list(searching = F)))
+    # }
+    
     # Show the responses in the admin table
     output$responsesTable <- DT::renderDataTable(
-      DT::datatable(sqlQuery(channel, "SELECT * FROM responses"), options = list(searching = F))
-      
-      
-    )
+      DT::datatable(sqlQuery(connHandle, "SELECT * FROM responses"), options = list(searching = F)))
     
     # Allow user to download responses
     output$downloadBtn <- downloadHandler(
