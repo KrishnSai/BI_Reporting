@@ -1,11 +1,3 @@
-#
-# This is the server logic of a Shiny web application. You can run the 
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
 
 library(shiny)
 
@@ -20,14 +12,7 @@ fieldsMandatory <-
   c("First_Name", "Last_Name", "In_Time", "Out_Time")
 
 
-
-# get current Epoch time
-epochTime <- function() {
-  return(as.integer(Sys.time()))
-}
-
-# get a formatted string of the timestamp (exclude colons as they are invalid
-# characters in Windows filenames)
+# get a formatted string of the timestamp (exclude colons as they are invalid # characters in Windows filenames)
 humanTime <- function() {
   format(Sys.time(), "%Y%m%d-%H%M%OS")
 }
@@ -50,7 +35,6 @@ loadData <- function() {
 
 # directory where responses get stored
 responsesDir <- file.path("responses")
-
 
 server = function(input, output, session) {
     # Enable the Submit button when all mandatory fields are filled out
@@ -124,11 +108,6 @@ server = function(input, output, session) {
     isAdmin <- reactive({
       is.null(session$user) || session$user %in% adminUsers
     })
-    
-    # if (input$submit) {
-    #   output$responsesTable <- DT::renderDataTable(
-    #     DT::datatable(sqlQuery(channel, "SELECT * FROM responses"), options = list(searching = F)))
-    # }
     
     # Show the responses in the admin table
     output$responsesTable <- DT::renderDataTable(

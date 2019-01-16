@@ -9,6 +9,7 @@ labelMandatory <- function(label) {
           span("*", class = "mandatory_star"))
 }
 
+
 # CSS to use in the app
 appCSS <-
   ".mandatory_star { color: red; }
