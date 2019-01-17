@@ -26,9 +26,9 @@ body { background: #fcfcfc; }
 
   ui = #fluidPage(theme = shinytheme("sandstone"),
                  
-                 navbarPage(theme = shinytheme("sandstone"),
+                 navbarPage(theme = shinytheme("spacelab"),
                    tabPanel("Navbar 0", "Performance Dashboard",
-                            paste0('on ',format(Sys.Date(),"%Y/%m/%d"))),
+                            paste0('- ',format(Sys.Date(),"%Y/%m/%d"))),
                    tabPanel(
                      "Data Entry",
                      shinyjs::useShinyjs(),
@@ -94,7 +94,6 @@ body { background: #fcfcfc; }
                                             offset = 1
                                        )
                                      ),
-                            hr(),
                             fluidRow(column(width = 5,
                                             br(),
                                             tableOutput("brush_info"),

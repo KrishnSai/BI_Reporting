@@ -150,8 +150,9 @@ server = function(input, output, session) {
       ggplot(data = data, aes(y=HOUR_DIFF,x=day)) +
         geom_point(shape=15,size = 5,aes(color = ifelse(data$HOUR_DIFF<= 8,Ok,defaulter)), show.legend = T ) + 
         scale_color_manual(labels = c("Default", "Success"), values = c("red", "GREEN")) +
-        theme_bw(base_size = 15)  + theme(panel.background = element_rect(linetype =1,colour = 'black', size=2))+
-        labs(x= '', y= 'Work Hours') + labs(col="Legend") 
+        theme_bw(base_size = 15)  + theme(panel.background = element_rect(linetype =1,colour = 'black', size=2,  fill = '#e6e8ed'))+
+        labs(x= '', y= 'Work Hours') + labs(col="") +
+        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) 
       
     })
     
@@ -181,7 +182,8 @@ server = function(input, output, session) {
         labs(x= '', y= 'Working Hours') + 
         labs(col="Legend") +
         geom_smooth(level = .65, se= F, colour = 'red') + 
-        theme(panel.background = element_rect(linetype =1,colour = 'black', size=2))+
+        theme(panel.background = element_rect(linetype =1,colour = 'black', size=2, fill = '#e6e8ed'))+
+        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
         labs(x= '', y= 'Work Hours') + 
         labs(col="Legend") 
       
