@@ -12,9 +12,7 @@ labelMandatory <- function(label) {
 print("strt")
 connHandle_1 <- odbcConnect("ORA_XE", uid="SYSTEM", pwd="1234")
 employee <- sqlQuery(connHandle_1, "SELECT distinct(FIRST_NAME||' '||LAST_NAME) as users FROM responses")
-head(employee$USERS)
-print(employee$USERS)
-print("closed")
+
 
 # CSS to use in the app
 appCSS <-
@@ -29,7 +27,8 @@ body { background: #fcfcfc; }
   ui = #fluidPage(theme = shinytheme("sandstone"),
                  
                  navbarPage(theme = shinytheme("sandstone"),
-                   tabPanel("Navbar 0", "Performance Dashboard"),
+                   tabPanel("Navbar 0", "Performance Dashboard",
+                            paste0('on ',format(Sys.Date(),"%Y/%m/%d"))),
                    tabPanel(
                      "Data Entry",
                      shinyjs::useShinyjs(),
@@ -98,10 +97,9 @@ body { background: #fcfcfc; }
                             hr(),
                             fluidRow(column(width = 5,
                                             br(),
-                                            verbatimTextOutput("brush_info"),
+                                            tableOutput("brush_info"),
                                             offset = 1),
                                      column(width = 5,
-                                            
                                             selectInput("text", label = "Search employee", choices = as.list(employee$USERS)),
                                             offset = 1))
                             ),

@@ -150,12 +150,12 @@ server = function(input, output, session) {
       ggplot(data = data, aes(y=HOUR_DIFF,x=day)) +
         geom_point(shape=15,size = 5,aes(color = ifelse(data$HOUR_DIFF<= 8,Ok,defaulter)), show.legend = T ) + 
         scale_color_manual(labels = c("Default", "Success"), values = c("red", "GREEN")) +
-        theme_minimal(base_size = 15)  + theme(panel.background = element_rect(linetype =1,colour = 'black', size=2))+
+        theme_bw(base_size = 15)  + theme(panel.background = element_rect(linetype =1,colour = 'black', size=2))+
         labs(x= '', y= 'Work Hours') + labs(col="Legend") 
       
     })
     
-    output$brush_info <- renderPrint({
+    output$brush_info <- renderTable({
       brushedPoints(data, input$plot1_brush, xvar= 'day', yvar='HOUR_DIFF')
     })
     
@@ -176,7 +176,7 @@ server = function(input, output, session) {
       
       ggplot(data = individuals %>% filter(individuals$USERNAMES == input$text), aes(x = TIMESTAMP, y = HOUR_DIFF))+
         geom_bar(fill ='royalblue', col = "black",stat = "identity") + 
-        theme_classic() +
+        theme_bw() +
         theme_minimal(base_size = 15) +
         labs(x= '', y= 'Working Hours') + 
         labs(col="Legend") +
