@@ -172,13 +172,18 @@ server = function(input, output, session) {
       
       individuals$TIMESTAMP <- as.Date(individuals$TIMESTAMP, "%m/%d/%Y")
       
-      ggplot(data = individuals %>% filter(individuals$USERNAMES == 'USER TWO'), aes(x = TIMESTAMP, y = HOUR_DIFF))+
+      print(input$text)
+      
+      ggplot(data = individuals %>% filter(individuals$USERNAMES == input$text), aes(x = TIMESTAMP, y = HOUR_DIFF))+
         geom_bar(fill ='royalblue', col = "black",stat = "identity") + 
         theme_classic() +
         theme_minimal(base_size = 15) +
         labs(x= '', y= 'Working Hours') + 
         labs(col="Legend") +
-        geom_smooth(level = .65, se= F, colour = 'red')
+        geom_smooth(level = .65, se= F, colour = 'red') + 
+        theme(panel.background = element_rect(linetype =1,colour = 'black', size=2))+
+        labs(x= '', y= 'Work Hours') + 
+        labs(col="Legend") 
       
       
       

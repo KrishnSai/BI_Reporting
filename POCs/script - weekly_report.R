@@ -50,5 +50,5 @@ individuals$TIMESTAMP <- as.Date(individuals$TIMESTAMP, "%m/%d/%Y")
 ggplot(data = u1 %>% filter(u1$USERNAMES == 'USER TWO'), aes(x = TIMESTAMP, y = HOUR_DIFF))+
   geom_bar(fill ='royalblue', col = "black",stat = "identity") + theme_classic() +
   theme_minimal(base_size = 10) +
-  labs(x= '', y= 'Working Hours') + labs(col="Legend") + geom_smooth(level = .65, se= F, colour = 'red')
-
+  labs(x= '', y= 'Working Hours') + labs(col="Legend") + geom_smooth(level = .65, se= F, colour = 'red')+    coord_equal(.1/0.2)
+?c

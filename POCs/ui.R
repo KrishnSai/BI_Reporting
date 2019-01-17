@@ -9,8 +9,12 @@ labelMandatory <- function(label) {
           span("*", class = "mandatory_star"))
 }
 
+print("strt")
 connHandle_1 <- odbcConnect("ORA_XE", uid="SYSTEM", pwd="1234")
 employee <- sqlQuery(connHandle_1, "SELECT distinct(FIRST_NAME||' '||LAST_NAME) as users FROM responses")
+head(employee$USERS)
+print(employee$USERS)
+print("closed")
 
 # CSS to use in the app
 appCSS <-
@@ -21,7 +25,6 @@ appCSS <-
 body { background: #fcfcfc; }
 #header { background: #fff; border-bottom: 1px solid #ddd; margin: -20px -15px 0; padding: 15px 15px 10px; }
 "
-
 
   ui = #fluidPage(theme = shinytheme("sandstone"),
                  
@@ -87,22 +90,20 @@ body { background: #fcfcfc; }
                                      column(4,
                                             h4("Individual Performance"),
                                             br(),
-                                            plotOutput("plot2",
-                                                       brush = brushOpts(id = "plot1_brush")),
+                                            plotOutput("plot2"),
                                             style='margin-bottom:30px;border:3px double; padding: 10px;',
                                             offset = 1
                                        )
                                      ),
                             hr(),
                             fluidRow(column(width = 5,
+                                            br(),
                                             verbatimTextOutput("brush_info"),
                                             offset = 1),
-                                            fluidRow(column(width = 6,
-                                                            selectizeInput('search_One', 
-                                                                           'Search an employee',
-                                                                           choices =   employee$users),
-                                                     offset = 1))
-                                     )
+                                     column(width = 5,
+                                            
+                                            selectInput("text", label = "Search employee", choices = as.list(employee$USERS)),
+                                            offset = 1))
                             ),
 
                    tabPanel("Visualisation", "Data Visualisation")
