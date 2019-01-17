@@ -9,6 +9,8 @@ labelMandatory <- function(label) {
           span("*", class = "mandatory_star"))
 }
 
+connHandle_1 <- odbcConnect("ORA_XE", uid="SYSTEM", pwd="1234")
+employee <- sqlQuery(connHandle_1, "SELECT distinct(FIRST_NAME||' '||LAST_NAME) as users FROM responses")
 
 # CSS to use in the app
 appCSS <-
@@ -21,9 +23,9 @@ body { background: #fcfcfc; }
 "
 
 
-  ui = fluidPage(theme = shinytheme("sandstone"),
+  ui = #fluidPage(theme = shinytheme("sandstone"),
                  
-                 navbarPage(
+                 navbarPage(theme = shinytheme("sandstone"),
                    tabPanel("Navbar 0", "Performance Dashboard"),
                    tabPanel(
                      "Data Entry",
@@ -73,6 +75,27 @@ body { background: #fcfcfc; }
                               uiOutput("adminPanelContainer"))
                      )
                    ),
-                   tabPanel("Reports", "Performance Reports"),
+                   tabPanel("Reports",
+                            br(),
+                            fluidRow(column(5,
+                                            h4("Weekly Employee Performance"),
+                                            br(),
+                                            plotOutput("plot1",   
+                                                       brush = brushOpts(id = "plot1_brush")),
+                                            style='margin-bottom:30px;border:3px double; padding: 10px;',
+                                            offset = 1),
+                                     column(5,
+                                            selectizeInput('search_One', 
+                                                           'Search an employee',
+                                                           choices =   employee$users),
+                                            offset = 1
+                                       )
+                                     ),
+                            hr(),
+                            fluidRow(column(width = 5,
+                                            verbatimTextOutput("brush_info"),
+                                            offset = 1))
+                            ),
+
                    tabPanel("Visualisation", "Data Visualisation")
-                 ))
+                 )
