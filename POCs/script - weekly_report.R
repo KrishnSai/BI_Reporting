@@ -35,7 +35,7 @@ z <- list(sqlQuery(connHandle, "SELECT distinct(FIRST_NAME||' '||LAST_NAME) as u
 head(z)
 class(z)
 
-u1 <- sqlQuery(connHandle, "SELECT R.FIRST_NAME||' '|| R.LAST_NAME as usernames,
+individuals <- sqlQuery(connHandle, "SELECT R.FIRST_NAME||' '|| R.LAST_NAME as usernames,
                              - ROUND(((TO_DATE(R.TIMESTAMP||' '||R.out_time,'MM/DD/YYYY HH24:MI') -  TO_DATE(R.TIMESTAMP||' '||R.in_time,'MM/DD/YYYY HH24:MI')) *1440/60),2) AS HOUR_DIFF,
                r.timestamp
                FROM RESPONSES R 
@@ -44,11 +44,11 @@ u1 <- sqlQuery(connHandle, "SELECT R.FIRST_NAME||' '|| R.LAST_NAME as usernames,
                AND R.IN_time IS NOT NULL
                AND  EXTRACT(YEAR FROM TO_DATE(TIMESTAMP,'MM/DD/YYYY')) = 2018")
 
-u1$TIMESTAMP <- as.Date(u1$TIMESTAMP, "%m/%d/%Y")
+individuals$TIMESTAMP <- as.Date(individuals$TIMESTAMP, "%m/%d/%Y")
 
 
-ggplot(data = u1 %>% filter(u1$USERNAMES == 'u'), aes(x = u1$TIMESTAMP, y = u1$HOUR_DIFF))+
+ggplot(data = u1 %>% filter(u1$USERNAMES == 'USER TWO'), aes(x = TIMESTAMP, y = HOUR_DIFF))+
   geom_bar(fill ='royalblue', col = "black",stat = "identity") + theme_classic() +
-  theme_minimal(base_size = 10)  +
-  labs(x= '', y= 'Working Hours') + labs(col="Legend")
+  theme_minimal(base_size = 10) +
+  labs(x= '', y= 'Working Hours') + labs(col="Legend") + geom_smooth(level = .65, se= F, colour = 'red')
 

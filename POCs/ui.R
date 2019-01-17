@@ -78,23 +78,31 @@ body { background: #fcfcfc; }
                    tabPanel("Reports",
                             br(),
                             fluidRow(column(5,
-                                            h4("Weekly Employee Performance"),
+                                            h4("All Employees Weekly Performance"),
                                             br(),
                                             plotOutput("plot1",   
                                                        brush = brushOpts(id = "plot1_brush")),
                                             style='margin-bottom:30px;border:3px double; padding: 10px;',
                                             offset = 1),
-                                     column(5,
-                                            selectizeInput('search_One', 
-                                                           'Search an employee',
-                                                           choices =   employee$users),
+                                     column(4,
+                                            h4("Individual Performance"),
+                                            br(),
+                                            plotOutput("plot2",
+                                                       brush = brushOpts(id = "plot1_brush")),
+                                            style='margin-bottom:30px;border:3px double; padding: 10px;',
                                             offset = 1
                                        )
                                      ),
                             hr(),
                             fluidRow(column(width = 5,
                                             verbatimTextOutput("brush_info"),
-                                            offset = 1))
+                                            offset = 1),
+                                            fluidRow(column(width = 6,
+                                                            selectizeInput('search_One', 
+                                                                           'Search an employee',
+                                                                           choices =   employee$users),
+                                                     offset = 1))
+                                     )
                             ),
 
                    tabPanel("Visualisation", "Data Visualisation")

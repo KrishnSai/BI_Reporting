@@ -151,12 +151,37 @@ server = function(input, output, session) {
         geom_point(shape=15,size = 5,aes(color = ifelse(data$HOUR_DIFF<= 8,Ok,defaulter)), show.legend = T ) + 
         scale_color_manual(labels = c("Default", "Success"), values = c("red", "GREEN")) +
         theme_minimal(base_size = 15)  + theme(panel.background = element_rect(linetype =1,colour = 'black', size=2))+
-        labs(x= 'Days', y= 'Work Hours') + labs(col="Legend") 
+        labs(x= '', y= 'Work Hours') + labs(col="Legend") 
       
     })
     
     output$brush_info <- renderPrint({
       brushedPoints(data, input$plot1_brush, xvar= 'day', yvar='HOUR_DIFF')
+    })
+    
+    output$plot2 <- renderPlot({
+      
+      individuals <- sqlQuery(connHandle, "SELECT R.FIRST_NAME||' '|| R.LAST_NAME as usernames,
+                             - ROUND(((TO_DATE(R.TIMESTAMP||' '||R.out_time,'MM/DD/YYYY HH24:MI') -  TO_DATE(R.TIMESTAMP||' '||R.in_time,'MM/DD/YYYY HH24:MI')) *1440/60),2) AS HOUR_DIFF,
+                              r.timestamp
+                              FROM RESPONSES R 
+                              WHERE r.system = 'NOBEL'
+                              AND R.out_time IS NOT NULL
+                              AND R.IN_time IS NOT NULL
+                              AND  EXTRACT(YEAR FROM TO_DATE(TIMESTAMP,'MM/DD/YYYY')) = 2018")
+      
+      individuals$TIMESTAMP <- as.Date(individuals$TIMESTAMP, "%m/%d/%Y")
+      
+      ggplot(data = individuals %>% filter(individuals$USERNAMES == 'USER TWO'), aes(x = TIMESTAMP, y = HOUR_DIFF))+
+        geom_bar(fill ='royalblue', col = "black",stat = "identity") + 
+        theme_classic() +
+        theme_minimal(base_size = 15) +
+        labs(x= '', y= 'Working Hours') + 
+        labs(col="Legend") +
+        geom_smooth(level = .65, se= F, colour = 'red')
+      
+      
+      
     })
 
     
