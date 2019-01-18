@@ -1,6 +1,8 @@
 
 library(shiny)
 library(ggplot2)
+library(dplyr)
+
 
 connHandle <- odbcConnect("ORA_XE", uid="SYSTEM", pwd="1234")
 query <- "INSERT INTO RESPONSES (FIRST_NAME, LAST_NAME, IN_TIME, OUT_TIME, SYSTEM) VALUES (?, ?, ?, ?, ?)"
@@ -176,7 +178,7 @@ server = function(input, output, session) {
       print(input$text)
       
       ggplot(data = individuals %>% filter(individuals$USERNAMES == input$text), aes(x = TIMESTAMP, y = HOUR_DIFF))+
-        geom_bar(fill ='royalblue', col = "black",stat = "identity") + 
+        geom_bar(fill ='#328770', col = "black",stat = "identity") + 
         theme_bw() +
         theme_minimal(base_size = 15) +
         labs(x= '', y= 'Working Hours') + 
