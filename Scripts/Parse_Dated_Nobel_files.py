@@ -87,8 +87,6 @@ for f in files:
     print("SQL connection closed")
 
 
-# In[ ]:
-
 
 
 
