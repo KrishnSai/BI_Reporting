@@ -1,5 +1,1 @@
-cd C:/Users/GTX STATION/Documents/Internship - GTX/BI_Reporting/wORK
-jupyter nbconvert --to notebook --execute 'C:/Users/GTX STATION/Documents/Internship - GTX/BI_Reporting/Scripts/Parse_Dated_Nobel_files.py'
-
-
- exec(open("C:/Users/GTX STATION/Documents/Internship - GTX/BI_Reporting/Scripts/Parse_Dated_Nobel_files.py").read())
+python.exe Parse_Dated_Nobel_files.py
