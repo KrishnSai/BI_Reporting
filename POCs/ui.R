@@ -9,6 +9,10 @@ labelMandatory <- function(label) {
           span("*", class = "mandatory_star"))
 }
 
+print("strt")
+connHandle_1 <- odbcConnect("ORA_XE", uid="SYSTEM", pwd="1234")
+employee <- sqlQuery(connHandle_1, "SELECT distinct(FIRST_NAME||' '||LAST_NAME) as users FROM responses")
+
 
 # CSS to use in the app
 appCSS <-
@@ -20,11 +24,11 @@ body { background: #fcfcfc; }
 #header { background: #fff; border-bottom: 1px solid #ddd; margin: -20px -15px 0; padding: 15px 15px 10px; }
 "
 
-
-  ui = fluidPage(theme = shinytheme("sandstone"),
+  ui = #fluidPage(theme = shinytheme("sandstone"),
                  
-                 navbarPage(
-                   tabPanel("Navbar 0", "Performance Dashboard"),
+                 navbarPage(theme = shinytheme("spacelab"),
+                   tabPanel("Navbar 0", "Performance Dashboard",
+                            paste0('- ',format(Sys.Date(),"%Y/%m/%d"))),
                    tabPanel(
                      "Data Entry",
                      shinyjs::useShinyjs(),
@@ -76,6 +80,31 @@ body { background: #fcfcfc; }
                               uiOutput("adminPanelContainer"))
                      )
                    ),
-                   tabPanel("Reports", "Performance Reports"),
+                   tabPanel("Reports",
+                            br(),
+                            fluidRow(column(5,
+                                            h4("All Employees Weekly Performance"),
+                                            br(),
+                                            plotOutput("plot1",   
+                                                       brush = brushOpts(id = "plot1_brush")),
+                                            style='margin-bottom:30px;border:3px double; padding: 10px;',
+                                            offset = 1),
+                                     column(4,
+                                            h4("Individual Performance"),
+                                            br(),
+                                            plotOutput("plot2"),
+                                            style='margin-bottom:30px;border:3px double; padding: 10px;',
+                                            offset = 1
+                                       )
+                                     ),
+                            fluidRow(column(width = 5,
+                                            br(),
+                                            tableOutput("brush_info"),
+                                            offset = 1),
+                                     column(width = 5,
+                                            selectInput("text", label = "Search employee", choices = as.list(employee$USERS)),
+                                            offset = 1))
+                            ),
+
                    tabPanel("Visualisation", "Data Visualisation")
-                 ))
+                 )

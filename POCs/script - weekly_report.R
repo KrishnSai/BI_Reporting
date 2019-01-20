@@ -1,12 +1,54 @@
 library(RODBC)
+library (ggplot2)
+library (dplyr)
+
+
 connHandle <- odbcConnect("ORA_XE", uid="SYSTEM", pwd="1234")
 
-data  = sqlQuery(connHandle, "  SELECT R.FIRST_NAME,
-         R.LAST_NAME ,
-         SUM(TRUNC((TO_DATE(R.TIMESTAMP||' '||R.out_time,'DD-MM-YYYY HH24:MI') -  TO_DATE(R.TIMESTAMP||' '||R.in_time,'DD-MM-YYYY HH24:MI')) *1440/60)) AS HOUR_DIFF,
-         r.timestamp
-    FROM RESPONSES R 
-    WHERE r.system = 'NOBEL' GROUP BY R.FIRST_NAME,R.LAST_NAME,R.TIMESTAMP;")
+data  = sqlQuery(connHandle, " SELECT * FROM  (
+                               SELECT R.FIRST_NAME,
+                                             R.LAST_NAME,
+                                             - ROUND(SUM(((TO_DATE(R.TIMESTAMP||' '||R.out_time,'MM/DD/YYYY HH24:MI') -  TO_DATE(R.TIMESTAMP||' '||R.in_time,'MM/DD/YYYY HH24:MI')) *1440/60)),2) AS HOUR_DIFF,
+                                             r.timestamp
+                                             FROM RESPONSES R 
+                                             WHERE r.system = 'NOBEL'
+                                             AND R.out_time IS NOT NULL
+                                             AND R.IN_time IS NOT NULL
+                                             AND  EXTRACT(YEAR FROM TO_DATE(TIMESTAMP,'MM/DD/YYYY')) = 2018
+                                             GROUP BY R.FIRST_NAME,R.LAST_NAME,R.TIMESTAMP) WHERE HOUR_DIFF > 0; "  )
 
 
-library (ggplot2)
+data$day <- weekdays(as.Date(data$TIMESTAMP)) 
+
+head(data)
+
+defaulter <- "Red"
+Ok <- "blue"
+
+ggplot(data = data, aes(y=data$HOUR_DIFF,x=data$day)) +
+      geom_point(shape=15,size = 5,aes(color = ifelse(data$HOUR_DIFF<= 8,Ok,defaulter)), show.legend = T ) + 
+      scale_color_manual(labels = c("Default", "Success"), values = c("red", "GREEN")) +
+      theme_minimal(base_size = 22)  +
+      labs(title = "Weekly Employee Performance", x= '', y= 'Work Hours') + labs(col="Legend")
+
+z <- list(sqlQuery(connHandle, "SELECT distinct(FIRST_NAME||' '||LAST_NAME) as users FROM responses"))
+head(z)
+class(z)
+
+individuals <- sqlQuery(connHandle, "SELECT R.FIRST_NAME||' '|| R.LAST_NAME as usernames,
+                             - ROUND(((TO_DATE(R.TIMESTAMP||' '||R.out_time,'MM/DD/YYYY HH24:MI') -  TO_DATE(R.TIMESTAMP||' '||R.in_time,'MM/DD/YYYY HH24:MI')) *1440/60),2) AS HOUR_DIFF,
+               r.timestamp
+               FROM RESPONSES R 
+               WHERE r.system = 'NOBEL'
+               AND R.out_time IS NOT NULL
+               AND R.IN_time IS NOT NULL
+               AND  EXTRACT(YEAR FROM TO_DATE(TIMESTAMP,'MM/DD/YYYY')) = 2018")
+
+individuals$TIMESTAMP <- as.Date(individuals$TIMESTAMP, "%m/%d/%Y")
+
+
+ggplot(data = u1 %>% filter(u1$USERNAMES == 'USER TWO'), aes(x = TIMESTAMP, y = HOUR_DIFF))+
+  geom_bar(fill ='royalblue', col = "black",stat = "identity") + theme_classic() +
+  theme_minimal(base_size = 10) +
+  labs(x= '', y= 'Working Hours') + labs(col="Legend") + geom_smooth(level = .65, se= F, colour = 'red')+    coord_equal(.1/0.2)
+?c
