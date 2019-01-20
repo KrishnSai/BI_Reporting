@@ -53,6 +53,7 @@ body { background: #fcfcfc; }
                              choices = c('COSEC', 'NOBEL'),
                              inline = T
                            ),
+                           
                            #checkboxInput("COSEC", "Door Data", F),
                            actionButton("submit", "Submit", class = "btn-primary"),
                            
@@ -69,6 +70,8 @@ body { background: #fcfcfc; }
                            actionLink("submit_another", "Submit another response")
                          ))
                        ),
+                       
+                       
                        column(3,
                               uiOutput("adminPanelContainer"))
                      )
