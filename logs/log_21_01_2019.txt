@@ -4,96 +4,199 @@
 ############################################
   
 Agent Hours_2019.01.18.04.08.56.csv
-SQL connection opened
 Query 1 Executed
 Query 2 Executed
 Query 3 Executed
 Query 4 Executed
 Total 52 rows were inserted to the table STAGING_NOBLE
              
-SQL connection closed
 Agent Hours_2019.01.21.05.03.03.csv
-SQL connection opened
 Query 1 Executed
 Query 2 Executed
 Query 3 Executed
 Query 4 Executed
 Total 348 rows were inserted to the table STAGING_NOBLE
              
-SQL connection closed
 Agent Hours_2019.01.21.05.07.13.csv
-SQL connection opened
 Query 1 Executed
 Query 2 Executed
 Query 3 Executed
 Query 4 Executed
 Total 39 rows were inserted to the table STAGING_NOBLE
              
-SQL connection closed
 ############################################
 ################### END ##################
-
-ERROR : ++++++++++++++++++++++++++++++++++++
-name 'loggin' is not defined
-++++++++++++++++++++++++++++++++++++++++++
-
+############################################
+SQL connection closed
   
 ############################################
 ################### START ##################
 ############################################
   
-Agent Hours_2019.01.18.04.08.56.csv
-SQL connection opened
-Query 1 Executed
-Query 2 Executed
-File: Agent Hours_2019.01.18.04.08.56.csv previously uploaded
-SQL connection closed
 Agent Hours_2019.01.21.05.03.03.csv
-SQL connection opened
 Query 1 Executed
 Query 2 Executed
 File: Agent Hours_2019.01.21.05.03.03.csv previously uploaded
-SQL connection closed
-Agent Hours_2019.01.21.05.07.13.csv
-SQL connection opened
-Query 1 Executed
-Query 2 Executed
-File: Agent Hours_2019.01.21.05.07.13.csv previously uploaded
-SQL connection closed
 ############################################
 ################### END ##################
-
-ERROR : ++++++++++++++++++++++++++++++++++++
-name 'loggin' is not defined
-++++++++++++++++++++++++++++++++++++++++++
-
+############################################
+SQL connection closed
   
 ############################################
 ################### START ##################
 ############################################
   
-Agent Hours_2019.01.18.04.08.56.csv
-SQL connection opened
-Query 1 Executed
-Query 2 Executed
-File: Agent Hours_2019.01.18.04.08.56.csv previously uploaded
-SQL connection closed
 Agent Hours_2019.01.21.05.03.03.csv
-SQL connection opened
 Query 1 Executed
 Query 2 Executed
 File: Agent Hours_2019.01.21.05.03.03.csv previously uploaded
+############################################
+################### END ##################
+############################################
 SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
+Agent Hours_2019.01.21.05.03.03.csv
+Query 1 Executed
+Query 2 Executed
+File: Agent Hours_2019.01.21.05.03.03.csv previously uploaded
+############################################
+################### END ##################
+############################################
+SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
+Agent Hours_2019.01.21.05.03.03.csv
+Query 1 Executed
+Query 2 Executed
+File: Agent Hours_2019.01.21.05.03.03.csv previously uploaded
+############################################
+################### END ##################
+############################################
+SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
+Agent Hours_2019.01.21.05.03.03.csv
+Query 1 Executed
+Query 2 Executed
+Query 3 Executed
+Query 4 Executed
+Total 348 rows were inserted to the table STAGING_NOBLE
+             
+############################################
+################### END ##################
+############################################
+SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
 Agent Hours_2019.01.21.05.07.13.csv
-SQL connection opened
 Query 1 Executed
 Query 2 Executed
 File: Agent Hours_2019.01.21.05.07.13.csv previously uploaded
-SQL connection closed
 ############################################
 ################### END ##################
-
-ERROR : ++++++++++++++++++++++++++++++++++++
-name 'loggin' is not defined
-++++++++++++++++++++++++++++++++++++++++++
-
+############################################
+SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
+Agent Hours_2019.01.21.05.07.13.csv
+Query 1 Executed
+Query 2 Executed
+File: Agent Hours_2019.01.21.05.07.13.csv previously uploaded
+############################################
+################### END ##################
+############################################
+SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
+Agent Hours_2019.01.21.05.07.13.csv
+Query 1 Executed
+Query 2 Executed
+File: Agent Hours_2019.01.21.05.07.13.csv previously uploaded
+############################################
+################### END ##################
+############################################
+SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
+Agent Hours_2019.01.21.05.07.13.csv
+Query 1 Executed
+Query 2 Executed
+File: Agent Hours_2019.01.21.05.07.13.csv previously uploaded
+############################################
+################### END ##################
+############################################
+SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
+Agent Hours_2019.01.21.05.07.13.csv
+Query 1 Executed
+Query 2 Executed
+File: Agent Hours_2019.01.21.05.07.13.csv previously uploaded
+############################################
+################### END ##################
+############################################
+SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
+Agent Hours_2019.01.21.05.07.13.csv
+Query 1 Executed
+Query 2 Executed
+File: Agent Hours_2019.01.21.05.07.13.csv previously uploaded
+############################################
+################### END ##################
+############################################
+SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
+Agent Hours_2019.01.21.05.07.13.csv
+Query 1 Executed
+Query 2 Executed
+File: Agent Hours_2019.01.21.05.07.13.csv previously uploaded
+############################################
+################### END ##################
+############################################
+SQL connection closed
+  
+############################################
+################### START ##################
+############################################
+  
+Agent Hours_2019.01.21.05.07.13.csv
+Query 1 Executed
+Query 2 Executed
+File: Agent Hours_2019.01.21.05.07.13.csv previously uploaded
+############################################
+################### END ##################
+############################################
+SQL connection closed
