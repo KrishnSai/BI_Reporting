@@ -6,28 +6,28 @@ library(DT)
 
 connHandle <- odbcConnect("ORA_XE", uid = "SYSTEM", pwd = "1234")
 
-data_temp  = sqlQuery(
-  connHandle,
-  "
-  SELECT * FROM (
-  SELECT DA.AGENT_NAME,
-  SUM(r.total_summary_in_hrs) AS WORK_HOURS,
-  r.contact_date AS TIMESTAMP
-  FROM DAILY_NOBLE_DATA_FACT R,
-  DIM_AGENT DA
-  WHERE da.agent_id =r.agent_id
-  AND CONTACT_DATE >= TO_DATE(SYSDATE - 7, 'DD-MON-YY')
-  GROUP BY DA.AGENT_NAME, r.contact_date) WHERE WORK_HOURS > 1"
+
+querystring1 = "alter session set nls_date_format = 'mm/dd/yyyy'"
+sqlQuery(connHandle, querystring1)
+
+
+
+data_temp  = sqlQuery(connHandle, "
+                      SELECT DA.AGENT_NAME,
+                      SUM(r.total_summary_in_hrs) AS WORK_HOURS,
+                      r.contact_date AS WORK_DATE
+                      FROM DAILY_NOBLE_DATA_FACT R,
+                      DIM_AGENT DA
+                      WHERE da.agent_id =r.agent_id
+                      AND CONTACT_DATE >= TO_DATE(SYSDATE - 7, 'mm/dd/yyyy')
+                      GROUP BY DA.AGENT_NAME, r.contact_date",stringsAsFactors = T
 )
 
 
 
-data_temp$TIMESTAMP <-
-  format(strptime(data_temp$TIMESTAMP, format = "%d/%b/%y"), "%d-%b-%y")
+data_temp$WORK_DATE <- format(strptime(data_temp$WORK_DATE, format = "%m/%d/%Y"), "%d-%b-%y")
 
-data_temp$DAY <-
-  weekdays(strptime(data_temp$TIMESTAMP, format =  "%d-%b-%y"))
-
+data_temp$DAY <- weekdays(strptime(data_temp$WORK_DATE, format =  "%d-%b-%y"))
 
 defaulter <- "Red"
 Ok <- "blue"
@@ -89,7 +89,7 @@ server = function(input, output, session) {
     
     ggplot(
       data = data_temp %>% filter(data_temp$AGENT_NAME == input$text),
-      aes(x = TIMESTAMP, y = WORK_HOURS)
+      aes(x = WORK_DATE, y = WORK_HOURS)
     ) +
       geom_bar(fill = '#328770',
                col = "black",
