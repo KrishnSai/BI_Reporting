@@ -11,7 +11,7 @@ labelMandatory <- function(label) {
 
 print("strt")
 connHandle_1 <- odbcConnect("ORA_XE", uid="SYSTEM", pwd="1234")
-employee <- sqlQuery(connHandle_1, "SELECT distinct(FIRST_NAME||' '||LAST_NAME) as users FROM responses")
+employee <- sqlQuery(connHandle_1, "SELECT AGENT_NAME AS USERS FROM DIM_AGENT order by 1 asc")
 
 
 # CSS to use in the app
@@ -57,7 +57,6 @@ body { background: #fcfcfc; }
                              choices = c('COSEC', 'NOBEL'),
                              inline = T
                            ),
-                           
                            #checkboxInput("COSEC", "Door Data", F),
                            actionButton("submit", "Submit", class = "btn-primary"),
                            
@@ -74,8 +73,6 @@ body { background: #fcfcfc; }
                            actionLink("submit_another", "Submit another response")
                          ))
                        ),
-                       
-                       
                        column(3,
                               uiOutput("adminPanelContainer"))
                      )

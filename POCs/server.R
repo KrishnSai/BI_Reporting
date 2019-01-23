@@ -134,24 +134,25 @@ server = function(input, output, session) {
     
     output$plot1 <- renderPlot({
       
-      data  = sqlQuery(connHandle, " SELECT * FROM  (
-                       SELECT R.FIRST_NAME,
-                       R.LAST_NAME,
-                       - ROUND(SUM(((TO_DATE(R.TIMESTAMP||' '||R.out_time,'MM/DD/YYYY HH24:MI') -  TO_DATE(R.TIMESTAMP||' '||R.in_time,'MM/DD/YYYY HH24:MI')) *1440/60)),2) AS HOUR_DIFF,
-                       r.timestamp
-                       FROM RESPONSES R 
-                       WHERE r.system = 'NOBEL'
-                       AND R.out_time IS NOT NULL
-                       AND R.IN_time IS NOT NULL
-                       AND  EXTRACT(YEAR FROM TO_DATE(TIMESTAMP,'MM/DD/YYYY')) = 2018
-                       GROUP BY R.FIRST_NAME,R.LAST_NAME,R.TIMESTAMP) WHERE HOUR_DIFF > 0; "  )
+      data  = sqlQuery(connHandle, "
+                       SELECT DA.AGENT_NAME,
+                       SUM(r.total_summary_in_hrs) AS HOUR_DIFF,
+                       r.contact_date AS TIMESTAMP
+                       FROM DAILY_NOBLE_DATA_FACT R,
+                       DIM_AGENT DA
+                       WHERE da.agent_id =r.agent_id
+                       AND CONTACT_DATE >= TO_DATE(SYSDATE - 7, 'DD-MON-YY')
+                       GROUP BY DA.AGENT_NAME, r.contact_date"
+      )
       
-      data$day <- weekdays(as.Date(data$TIMESTAMP)) 
+      data$TIMESTAMP <- format(strptime(data$TIMESTAMP, format = "%d/%b/%y"), "%d-%b-%y")
       
+      data$DAY <- weekdays(strptime(data$TIMESTAMP, format =  "%d-%b-%y"))
       
-      ggplot(data = data, aes(y=HOUR_DIFF,x=day)) +
+
+      ggplot(data = data, aes(y=HOUR_DIFF,x=DAY)) +
         geom_point(shape=15,size = 5,aes(color = ifelse(data$HOUR_DIFF<= 8,Ok,defaulter)), show.legend = T ) + 
-        scale_color_manual(labels = c("Default", "Success"), values = c("red", "GREEN")) +
+        scale_color_manual(labels = c("Default", "Success"), values = c("#D55E00", "#0072B2")) +
         theme_bw(base_size = 15)  + theme(panel.background = element_rect(linetype =1,colour = 'black', size=2,  fill = '#e6e8ed'))+
         labs(x= '', y= 'Work Hours') + labs(col="") +
         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) 
@@ -159,25 +160,29 @@ server = function(input, output, session) {
     })
     
     output$brush_info <- renderTable({
-      brushedPoints(data, input$plot1_brush, xvar= 'day', yvar='HOUR_DIFF')
+      brushedPoints(data, input$plot1_brush, xvar= 'DAY', yvar='HOUR_DIFF')
     })
     
     output$plot2 <- renderPlot({
       
-      individuals <- sqlQuery(connHandle, "SELECT R.FIRST_NAME||' '|| R.LAST_NAME as usernames,
-                             - ROUND(((TO_DATE(R.TIMESTAMP||' '||R.out_time,'MM/DD/YYYY HH24:MI') -  TO_DATE(R.TIMESTAMP||' '||R.in_time,'MM/DD/YYYY HH24:MI')) *1440/60),2) AS HOUR_DIFF,
-                              r.timestamp
-                              FROM RESPONSES R 
-                              WHERE r.system = 'NOBEL'
-                              AND R.out_time IS NOT NULL
-                              AND R.IN_time IS NOT NULL
-                              AND  EXTRACT(YEAR FROM TO_DATE(TIMESTAMP,'MM/DD/YYYY')) = 2018")
+      individuals <-  sqlQuery(connHandle, "
+                       SELECT DA.AGENT_NAME,
+                               SUM(r.total_summary_in_hrs) AS HOUR_DIFF,
+                               r.contact_date AS TIMESTAMP
+                               FROM DAILY_NOBLE_DATA_FACT R,
+                               DIM_AGENT DA
+                               WHERE da.agent_id =r.agent_id
+                               AND CONTACT_DATE >= TO_DATE(SYSDATE - 7, 'DD-MON-YY')
+                               GROUP BY DA.AGENT_NAME, r.contact_date"
+      )
       
-      individuals$TIMESTAMP <- as.Date(individuals$TIMESTAMP, "%m/%d/%Y")
+      data$TIMESTAMP <- format(strptime(data$TIMESTAMP, format = "%d/%b/%y"), "%d-%b-%y")
+      
+      data$DAY <- weekdays(strptime(data$TIMESTAMP, format =  "%d-%b-%y"))
       
       print(input$text)
       
-      ggplot(data = individuals %>% filter(individuals$USERNAMES == input$text), aes(x = TIMESTAMP, y = HOUR_DIFF))+
+      ggplot(data = individuals %>% filter(individuals$AGENT_NAME == input$text), aes(x = TIMESTAMP, y = HOUR_DIFF))+
         geom_bar(fill ='#328770', col = "black",stat = "identity") + 
         theme_bw() +
         theme_minimal(base_size = 15) +
