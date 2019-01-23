@@ -1,1 +1,0 @@
-python.exe Parse_Dated_Nobel_files.py
