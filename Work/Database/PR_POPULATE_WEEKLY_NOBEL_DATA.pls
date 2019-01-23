@@ -48,7 +48,7 @@ SET     SHIFT = CASE
                     WHEN FLAG = 'TO_ADJUST' THEN 'TO_ADD' 
                     ELSE 'TO_COMPUTE'
                 END,
-        WEEK_DAY = RTRIM(TO_CHAR(TO_DATE(CONTACT_DATE,'DD/MON/YY'), 'Day'))
+        WEEK_DAY = RTRIM(TO_CHAR(TO_DATE(CONTACT_DATE,'mm/dd/yyyy'), 'Day'))
         WHERE (FLAG <> 'COMPLETE' or FLAG IS NULL);
 
 
