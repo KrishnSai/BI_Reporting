@@ -1,59 +1,84 @@
+
+# import the libraries 
 library(shiny)
-library(RODBCext) #https://stackoverflow.com/questions/44502558/insert-multiple-rows-from-r-dataframe-into-oracle-database
+library(RODBCext)
 library(shinythemes)
 library(RODBC)
 library(DT)
 
-print("strt")
+# create the oracle connection 
 connHandle_1 <- odbcConnect("ORA_XE", uid = "SYSTEM", pwd = "1234")
-employee <-
-  sqlQuery(connHandle_1,
-           "SELECT AGENT_NAME AS USERS FROM DIM_AGENT order by 1 asc")
+
+# fetch the unique employees from the database
+employee <-  sqlQuery(connHandle_1, "SELECT AGENT_NAME AS USERS FROM DIM_AGENT order by 1 asc")
+
 
 ui = 
   
-  navbarPage(
-    
+  # list the navigation bar with a shiny theme
+  navbarPage(    
     theme = shinytheme("spacelab"),
+
+    # first tab displaying the Title and the Date
     tabPanel("Navbar 0", "Performance Dashboard",
-             paste0('- ', format(
-               Sys.Date(), "%Y/%m/%d"
-             ))),
+             paste0('- ', format(Sys.Date(), "%Y/%m/%d"))
+             ),
+
+    # second tab displaying the weekly performance
     tabPanel(
       "Reports",
       br(),
+
+      # row 1 : (5/1-5/1)
       fluidRow(
-        column(
-          5,
-          h4("All Employees Weekly Performance"),
-          br(),
-          plotOutput("plot1",
-                     brush = brushOpts(id = "plot1_brush")),
-          style = 'margin-bottom:30px;border:3px double; padding: 10px;',
-          offset = 1
-        ),
-        column(
-          4,
-          h4("Individual Performance"),
-          br(),
-          plotOutput("plot2"),
-          style = 'margin-bottom:30px;border:3px double; padding: 10px;',
-          offset = 1
-        )
-      ),
+                
+                # point plot to dislay the overall working hours of all the employees for each day
+                column(
+                        5,
+                        h4("All Employees Weekly Performance"),
+                        br(),
+                        # element 1
+                        plotOutput("plot1", brush = brushOpts(id = "plot1_brush")),
+                        style = 'margin-bottom:30px;border:3px double; padding: 10px;',
+                        offset = 1
+                        ),
+
+                # bar plot to display the employee wirking hours based on the selecion from the drop down
+                column(
+                        4,    
+                        h4("Individual Performance"),
+                        br(),
+                        # element 2
+                        plotOutput("plot2"),
+                        style = 'margin-bottom:30px;border:3px double; padding: 10px;',
+                        offset = 1
+                      )
+
+              ),
+      
+      # row 2 : (5/1-5/1)
       fluidRow(
-        column(
-          width = 5,
-          DT::dataTableOutput("brush_info"),
-          offset = 1
-        ),
-        column(
-          width = 5,
-          selectInput("text", label = "Search employee", choices = as.list(employee$USERS)),
-          offset = 1
-        )
-      )
-    ),
+
+                # display the brush info from the point plots in a structured data table
+                column(
+                        width = 5,
+                        # element 3
+                        DT::dataTableOutput("datatable_one"),
+                        offset = 1
+                      ),
+                
+                # Search box to input employee name for bar plot generation
+                column(
+                        width = 5,
+                        # element 4
+                        selectInput("text", label = "Search employee", choices = as.list(employee$USERS)),
+                        offset = 1,
+                        column(3, textOutput('any_rows_selected'))
+                      )
+                )
+
+              ),
     
-    tabPanel("Visualisation", "Data Visualisation")
+    tabPanel("Search Employee", "TBD")
+
   )
