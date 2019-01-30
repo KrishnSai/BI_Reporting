@@ -87,7 +87,6 @@ ui =
                                      "Choose Shift",
                                       choices =  c( "Morning",
                                                     "Afternoon",
-                                                    "Evening",
                                                     "Night",
                                                     "All"), 
                                       selected = 'All', 

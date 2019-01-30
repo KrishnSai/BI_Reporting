@@ -68,7 +68,7 @@ values_var <- list('TOTAL_CONNECTED_IN_HRS',
                      'TOTAL_DEASSIGN_IN_HRS')
 select_var <- c(group_var,values_var)
 all_days <- c("Sunday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Monday")
-all_shifts <- c("Morning", "Afternoon", "Evening", "Night") 
+all_shifts <- c("Morning", "Afternoon", "Night") 
 
 
 server = function(input, output, session) {
