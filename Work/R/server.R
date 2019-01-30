@@ -4,6 +4,9 @@ library(shiny)
 library(ggplot2)
 library(dplyr)
 library(DT)
+library(reshape)
+library(viridis)
+library(wesanderson)
 
 # create the oracle connection 
 connHandle <- odbcConnect("ORA_XE", uid = "SYSTEM", pwd = "1234")
@@ -99,21 +102,23 @@ server = function(input, output, session) {
 
                               if (total_rows == 0) {
 
-                                                    #par(mar=c(12,12,12,12))
 
                                                     # if no rows returned from the filtered selection (on click) display an overall pie chart
-                                                    ggplot(m, aes(x="", y=value*2, fill=variable)) + 
+                                                    ggplot(melted_data, aes(x="", y=value*2, fill=variable)) + 
                                                     geom_bar(stat="identity", width=1, col = 'black') + coord_polar("y", start=0,clip = "on") + 
                                                     geom_text(aes(label = paste0(round(value,0), "%")), position = position_stack(vjust = 0.5)) +
                                                     scale_fill_manual( labels = c("Connected", "Waiting", "Paused", "Deassign"),
                                                                        values = wes_palette(n=4, name="Darjeeling2"))  +       
-                                                    theme_bw() + 
-                                                    theme_minimal(base_size = 15) +                                                    
+                                                    theme_bw(base_size = 15)  +                                                    
                                                     labs(x = NULL, y = NULL, fill = NULL) + 
                                                     labs(col = "Legend")  +
-                                                    theme(panel.background = element_rect(linetype = 1, colour = 'black', size = 2)) +
+                                                    theme(panel.background = element_rect(linetype = 1,
+                                                                                          colour = 'black',
+                                                                                          size = 2,
+                                                                                          fill = '#e6e8ed')) +
                                                     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
-                                                    theme(axis.text=element_blank())
+                                                    theme(axis.text=element_blank()) + 
+                                                    theme(legend.position="bottom") 
 
                                                      }
                                 else{
@@ -121,13 +126,15 @@ server = function(input, output, session) {
                                       # ggplot to generate the barplot of performcance selected employee over the week
                                       ggplot(data = data_left_pgOne %>% filter(AGENT_NAME == (input$datatable_one_cell_clicked)[3]),
                                            aes(x = CONTACT_DATE, y = WORK_HOURS)) +
-                                      geom_bar(fill = '#328770', col = "black", stat = "identity",  width = 1) +
+                                      geom_bar(fill = '#328770', col = "black", stat = "identity",  width = 0.5) +
                                       geom_smooth(level = .65,se = F, colour = 'red', method = 'loess',formula  = 'y ~ x') +
-                                      theme_bw() + 
-                                      theme_minimal(base_size = 15) + 
+                                      theme_bw(base_size = 15)  + 
                                       labs(x = '', y = 'Working Hours') +
                                       labs(col = "Legend") + 
-                                      theme(panel.background = element_rect(linetype = 1, colour = 'black', size = 2,fill = '#e6e8ed')) +
+                                      theme(panel.background = element_rect(linetype = 1,
+                                                                            colour = 'black',
+                                                                            size = 2,
+                                                                            fill = '#e6e8ed')) +
                                       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
                                       labs(x = '', y = 'WORK_HOURS') + labs(col = "Legend")  + 
                                       scale_x_date(date_breaks = 'day', date_labels = '%b %d\n%a')
