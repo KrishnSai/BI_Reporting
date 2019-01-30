@@ -47,6 +47,10 @@ over_perf <- data_temp %>%
   select(TOTAL_CONNECTED_IN_HRS,TOTAL_WAITING_IN_HRS, TOTAL_PAUSED_IN_HRS, TOTAL_DEASSIGN_IN_HRS)  %>%  
   summarise_all(funs(sum))
 
+KPI_perf_overall <- data_temp %>% 
+  select(SHIFT_TYPE,WEEK_DAY,AGENT_NAME,TOTAL_CONNECTED_IN_HRS,TOTAL_WAITING_IN_HRS, TOTAL_PAUSED_IN_HRS, TOTAL_DEASSIGN_IN_HRS)  %>%  
+  group_by(SHIFT_TYPE,WEEK_DAY,AGENT_NAME)  %>% summarise_all(funs(sum))
+
 
 melted_data <-  reshape2::melt(over_perf) %>% mutate_at(vars(value), funs(./ sum(.)*100))
 
