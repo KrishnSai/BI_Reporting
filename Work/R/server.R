@@ -33,11 +33,20 @@ data_temp  = sqlQuery(connHandle, "
 # Chanege the date Oracle format to R date
 data_temp$CONTACT_DATE <- as.Date(data_temp$CONTACT_DATE, "%m/%d/%Y")
 
-# aggregating the data for the second tab
+# aggregating the data for the second tab - weekly employee performance
 data_left_pgOne <-  data_temp %>%
                       select (.,AGENT_NAME,TOTAL_SUMMARY_IN_HRS,CONTACT_DATE) %>%
                       group_by(AGENT_NAME, CONTACT_DATE) %>% 
                       summarise(WORK_HOURS = sum(TOTAL_SUMMARY_IN_HRS, na.rm = TRUE))
+
+# aggregating the data for the second tab - overall call perfrmance
+over_perf <- data_temp %>% 
+  select(TOTAL_CONNECTED_IN_HRS,TOTAL_WAITING_IN_HRS, TOTAL_PAUSED_IN_HRS, TOTAL_DEASSIGN_IN_HRS)  %>%  
+  summarise_all(funs(sum))
+
+
+melted_data <-  reshape2::melt(over_perf) %>% mutate_at(vars(value), funs(./ sum(.)*100))
+
 
 # variable for conditional coloring at ggplot
 defaulter <- "Red"
@@ -85,21 +94,30 @@ server = function(input, output, session) {
                                               )
 
   # element 2
-  output$plot2 <- renderPlot({
-    
-                                # ggplot to generate the barplot of employee performance over the week
-                                ggplot(data = data_left_pgOne %>% filter(AGENT_NAME == (input$datatable_one_cell_clicked)[3]),
-                                       aes(x = CONTACT_DATE, y = WORK_HOURS)
-                                       ) +
-                                  geom_bar(fill = '#328770', col = "black", stat = "identity",  width = 1) +
-                                  theme_bw() + theme_minimal(base_size = 15) +   labs(x = '', y = 'Working Hours') +
-                                  labs(col = "Legend") +   geom_smooth(level = .65,se = F, colour = 'red', method = 'loess',formula  = 'y ~ x') +
-                                  theme(panel.background = element_rect(linetype = 1, colour = 'black', size = 2,fill = '#e6e8ed')) +
-                                  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-                                  labs(x = '', y = 'WORK_HOURS') + labs(col = "Legend")  + 
-                                  scale_x_date(date_breaks = 'day', date_labels = '%b %d\n%a')
-    
-                              })
+  output$plot2 <- renderPlot({  if (is.null(input$datatable_one_cell_clicked)[3]) {
+                                                                                      ggplot(m, aes(x="", y=value, fill=variable)) + geom_bar(stat="identity", width=1, col = 'black') +
+                                                                                      coord_polar("y", start=0) + 
+                                                                                      geom_text(aes(label = paste0(round(value,0), "%")), position = position_stack(vjust = 0.5)) +
+                                                                                      scale_fill_manual( labels = c("Connected", "Waiting", "Paused", "Deassign"),values = wes_palette(n=4, name="Darjeeling2"))  +
+                                                                                      labs(x = NULL, y = NULL, fill = NULL, title = "Work Shares") +
+                                                                                      theme_bw() + theme_minimal(base_size = 15) + 
+                                                                                      theme(panel.background = element_rect(linetype = 1, colour = 'black', size = 2)) +
+                                                                                      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+                                                                                      theme(axis.text=element_blank())
+                                                                                    }
+                                else{
+                                      # ggplot to generate the barplot of employee performance over the week
+                                      ggplot(data = data_left_pgOne %>% filter(AGENT_NAME == (input$datatable_one_cell_clicked)[3]),
+                                           aes(x = CONTACT_DATE, y = WORK_HOURS)) +
+                                      geom_bar(fill = '#328770', col = "black", stat = "identity",  width = 1) +
+                                      theme_bw() + theme_minimal(base_size = 15) +   labs(x = '', y = 'Working Hours') +
+                                      labs(col = "Legend") +   geom_smooth(level = .65,se = F, colour = 'red', method = 'loess',formula  = 'y ~ x') +
+                                      theme(panel.background = element_rect(linetype = 1, colour = 'black', size = 2,fill = '#e6e8ed')) +
+                                      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+                                      labs(x = '', y = 'WORK_HOURS') + labs(col = "Legend")  + 
+                                      scale_x_date(date_breaks = 'day', date_labels = '%b %d\n%a')
+                                 }
+                            })
 
    
 }

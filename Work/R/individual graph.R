@@ -90,15 +90,11 @@ over_perf <- data_temp %>%
 
 m <-  reshape2::melt(over_perf) %>% mutate_at(vars(value), funs(./ sum(.)*100))
 
-
-pie(m$value,m$variable)
-
-
 # Create a basic bar
 ggplot(m, aes(x="", y=value, fill=variable)) + geom_bar(stat="identity", width=1, col = 'black') +
   coord_polar("y", start=0) + 
   geom_text(aes(label = paste0(round(value,0), "%")), position = position_stack(vjust = 0.5)) +
-  scale_fill_manual( labels = c("Connected", "Waiting", "Paused", "Deassign"),wes.palette(n=3, name="GrandBudapest"))  +
+  scale_fill_manual( labels = c("Connected", "Waiting", "Paused", "Deassign"),values = wes_palette(n=4, name="Darjeeling2"))  +
   labs(x = NULL, y = NULL, fill = NULL, title = "Work Shares") +
   theme_bw() + theme_minimal(base_size = 15) + 
   theme(panel.background = element_rect(linetype = 1, colour = 'black', size = 2)) +
