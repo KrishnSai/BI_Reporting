@@ -88,7 +88,7 @@ server = function(input, output, session) {
   output$plot2 <- renderPlot({
     
                                 # ggplot to generate the barplot of employee performance over the week
-                                ggplot(data = data_left_pgOne %>% filter(AGENT_NAME == input$text),
+                                ggplot(data = data_left_pgOne %>% filter(AGENT_NAME == (input$datatable_one_cell_clicked)[3]),
                                        aes(x = CONTACT_DATE, y = WORK_HOURS)
                                        ) +
                                   geom_bar(fill = '#328770', col = "black", stat = "identity",  width = 1) +
@@ -100,23 +100,6 @@ server = function(input, output, session) {
                                   scale_x_date(date_breaks = 'day', date_labels = '%b %d\n%a')
     
                               })
- #--------------------------------------------------------------------------------# 
-  
-  sel <- reactive({!is.null(input$datatable_one_cell_clicked)})  
-    
-  # Output result of reactive function sel
-  output$any_rows_selected <- renderText({
-    paste("Any rows selected: ", info$value)
-  })
-  
-   observeEvent(input$datatable_one_cell_clicked, {
-    info = input$datatable_one_cell_clicked
-    # do nothing if not clicked yet, or the clicked cell is not in the 1st column
-    if (is.null(info$value) || info$col != 0) return()
-    print("Rows: ", info$value)
-    # paste("Columns: ", info$value)
-    # paste("Values: ", info$value)
-  })
-   
+
    
 }

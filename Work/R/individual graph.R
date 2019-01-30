@@ -2,6 +2,11 @@
 library(ggplot2)
 library(dplyr)
 library(DT)
+library(reshape)
+library(viridis)
+library(wesanderson)
+
+
 
 # create the oracle connection 
 connHandle <- odbcConnect("ORA_XE", uid = "SYSTEM", pwd = "1234")
@@ -79,4 +84,27 @@ ggplot(data = data_left_pgOne %>% filter(AGENT_NAME == 'Arnab Kumar Das'),
  
 x = data_left_pgOne %>% filter(AGENT_NAME == 'Arnab Kumar Das')
 
+over_perf <- data_temp %>% 
+  select(TOTAL_CONNECTED_IN_HRS,TOTAL_WAITING_IN_HRS, TOTAL_PAUSED_IN_HRS, TOTAL_DEASSIGN_IN_HRS)  %>%  
+  summarise_all(funs(sum))
 
+m <-  reshape2::melt(over_perf) %>% mutate_at(vars(value), funs(./ sum(.)*100))
+
+
+pie(m$value,m$variable)
+
+
+# Create a basic bar
+ggplot(m, aes(x="", y=value, fill=variable)) + geom_bar(stat="identity", width=1, col = 'black') +
+  coord_polar("y", start=0) + 
+  geom_text(aes(label = paste0(round(value,0), "%")), position = position_stack(vjust = 0.5)) +
+  scale_fill_manual( labels = c("Connected", "Waiting", "Paused", "Deassign"),wes.palette(n=3, name="GrandBudapest"))  +
+  labs(x = NULL, y = NULL, fill = NULL, title = "Work Shares") +
+  theme_bw() + theme_minimal(base_size = 15) + 
+  theme(panel.background = element_rect(linetype = 1, colour = 'black', size = 2)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+    theme(axis.text=element_blank())
+
+
+sum(m$value)
+install.packages("wesanderson")

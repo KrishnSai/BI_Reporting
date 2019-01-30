@@ -69,11 +69,11 @@ ui =
                 
                 # Search box to input employee name for bar plot generation
                 column(
-                        width = 5,
+                        width = 5
                         # element 4
-                        selectInput("text", label = "Search employee", choices = as.list(employee$USERS)),
-                        offset = 1,
-                        column(3, textOutput('any_rows_selected'))
+                        #selectInput("text", label = "Search employee", choices = as.list(employee$USERS)),
+                        #offset = 1,
+                        #column(3, textOutput('any_rows_selected'))
                       )
                 )
 
