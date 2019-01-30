@@ -82,9 +82,9 @@ ggplot(data = data_left_pgOne %>% filter(AGENT_NAME == 'Arnab Kumar Das'),
   labs(x = '', y = 'WORK_HOURS') + labs(col = "Legend")  + 
   scale_x_date(date_breaks = 'day', date_labels = '%b %d\n%a')
  
-x = data_left_pgOne %>% filter(AGENT_NAME == 'Arnab Kumar Das')
+x = data_left_pgOne %>% filter(AGENT_NAME == 'fdjh') 
 
-over_perf <- data_temp %>% 
+  over_perf <- data_temp %>% 
   select(TOTAL_CONNECTED_IN_HRS,TOTAL_WAITING_IN_HRS, TOTAL_PAUSED_IN_HRS, TOTAL_DEASSIGN_IN_HRS)  %>%  
   summarise_all(funs(sum))
 
