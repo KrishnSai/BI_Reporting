@@ -109,14 +109,14 @@ ggplot(m, aes(x="", y=value, fill=variable)) + geom_bar(stat="identity", width=1
   #-----------------------------------------------------------------------------------------------------------------------
   
   
-  group_var <- list('SHIFT_TYPE')
+  group_var <- list('SHIFT_TYPE','WEEK_DAY')
   values_var <- list('TOTAL_CONNECTED_IN_HRS',
                      'TOTAL_WAITING_IN_HRS', 
                      'TOTAL_PAUSED_IN_HRS', 
                      'TOTAL_DEASSIGN_IN_HRS')
   select_var <- c(group_var,values_var)
   
-  filter_val <- c('Afternoon')
+  filter_val <- c('Afternoon','Friday')
   
   
   dynamic_data <- KPI_perf_overall %>% ungroup() %>%
@@ -126,6 +126,9 @@ ggplot(m, aes(x="", y=value, fill=variable)) + geom_bar(stat="identity", width=1
   filter_(.,.dots = paste0(group_var, "=='", filter_val, "'")) %>% ungroup() %>%
   select_(.dots = values_var)
 
+  
+  paste0(group_var, "=='", filter_val, "'")
+  
   dynamic_data <- reshape2::melt(dynamic_data, measure.vars = unlist(values_var))
 
 
@@ -145,4 +148,66 @@ ggplot(m, aes(x="", y=value, fill=variable)) + geom_bar(stat="identity", width=1
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
   theme(axis.text=element_blank()) + 
   theme(legend.position="bottom") 
+  
+#-----------------------------------
+  
+filter_var <- list() 
+group_var <-  list('SHIFT_TYPE','WEEK_DAY')
+filter_val <- list()
+values_var <- list('TOTAL_CONNECTED_IN_HRS',
+                     'TOTAL_WAITING_IN_HRS', 
+                     'TOTAL_PAUSED_IN_HRS', 
+                     'TOTAL_DEASSIGN_IN_HRS')
+select_var <- c(group_var,values_var)
+all_days <- c("Sunday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Monday")
+all_shifts <- c("Morning", "Afternoon", "Evening", "Night") 
+
+daychoice <- "Tuesday"
+shiftchoice <- "Morning"
+
+if (daychoice != "All"){
+    filter_var <- list('WEEK_DAY')
+    filter_val <-  list(c(daychoice))
+} else {
+  filter_val <-  list()
+  filter_var <- list()
+}
+
+if (shiftchoice != "All"){
+    filter_var <- c(filter_var,list('SHIFT_TYPE'))
+    filter_val <- c(filter_val,list(shiftchoice))
+} else {
+  filter_val <- filter_val
+  filter_var <- filter_var
+}
+
+
+if (length(filter_val)==0 && length(filter_var)==0) {
+  filter_var = list('WEEK_DAY')
+  filter_val = list('%')
+} else {
+  
+  dynamic_data <- KPI_perf_overall %>% ungroup() %>%
+                select_(.dots = unlist(select_var)) %>%
+                filter_(.,.dots = paste0(unlist(filter_var), " %in% '", unlist(filter_val), "'"))%>%
+                select_(.dots = values_var)%>% summarise_all(funs(sum))
+}
+
+
+print(filter_var)
+print(filter_val)
+paste0(unlist(filter_var), " %in% '", unlist(filter_val), "'")
+       
+ dynamic_data <- KPI_perf_overall %>% ungroup() %>%
+                  select_(.dots = unlist(select_var)) %>%
+                  filter_(.,.dots = paste0(unlist(filter_var), " %in% '", unlist(filter_val), "'"))%>%
+                  select_(.dots = values_var) %>% 
+                  summarise_all(funs(sum))
+
+
+
+
+
+
+dynamic_data <- reshape2::melt(dynamic_data, measure.vars = unlist(values_var))
 

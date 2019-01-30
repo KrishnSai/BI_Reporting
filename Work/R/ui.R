@@ -1,4 +1,3 @@
-
 # import the libraries 
 library(shiny)
 library(RODBCext)
@@ -26,7 +25,7 @@ ui =
 
     # second tab displaying the weekly performance
     tabPanel(
-      "Weekly Report",
+      "Weekly Performance Report",
       br(),
 
       # row 1 : (5/1-5/1)

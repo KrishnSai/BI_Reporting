@@ -55,6 +55,7 @@ melted_data <-  reshape2::melt(over_perf) %>% mutate_at(vars(value), funs(./ sum
 defaulter <- "Red"
 Ok <- "blue"
 
+filter_var <- list() 
 group_var <-  list('SHIFT_TYPE','WEEK_DAY')
 filter_val <- list()
 values_var <- list('TOTAL_CONNECTED_IN_HRS',
@@ -63,7 +64,8 @@ values_var <- list('TOTAL_CONNECTED_IN_HRS',
                      'TOTAL_DEASSIGN_IN_HRS')
 select_var <- c(group_var,values_var)
 all_days <- c("Sunday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Monday")
-all_shifts <- c("Morning", "Afternoon", "Evening", "Night",) 
+all_shifts <- c("Morning", "Afternoon", "Evening", "Night") 
+
 
 server = function(input, output, session) {
   
@@ -112,22 +114,53 @@ server = function(input, output, session) {
 
                               if (total_rows == 0) {
                                                     
-                                                    if (input$daychoice != "All"){
-                                                        filter_val <-  list(c(input$daychoice))
-                                                    }
-                                                    else {
-                                                      filter_val <-  list(all_days)
-                                                    }
+                                                    if (input$daychoice != "All") {
 
-                                                    if (input$shiftchoice != "All"){
+                                                        filter_var <- list('WEEK_DAY')
+                                                        filter_val <-  list(c(input$daychoice))
+
+                                                      } else {
+
+                                                                filter_val <-  list()
+                                                                filter_var <- list()
+
+                                                              }
+
+                                                      if (input$shiftchoice != "All") {
+
+                                                        filter_var <- c(filter_var,list('SHIFT_TYPE'))
                                                         filter_val <- c(filter_val,list(input$shiftchoice))
-                                                    }
-                                                    else {
-                                                      filter_val <- c(filter_val,list(all_shifts))
-                                                    }
+
+                                                      } else {
+
+                                                                filter_val <- filter_val
+                                                                filter_var <- filter_var
+
+                                                              }
+
+                                                      if (length(filter_val)==0 && length(filter_var)==0) {
+
+                                                          dynamic_data <- KPI_perf_overall %>% ungroup() %>%
+                                                                          select_(.dots = unlist(select_var)) %>%
+                                                                          select_(.dots = values_var) %>% 
+                                                                          summarise_all(funs(sum))
+
+                                                      } else {
+
+                                                              dynamic_data <- KPI_perf_overall %>% ungroup() %>%
+                                                                              select_(.dots = unlist(select_var)) %>%
+                                                                              filter_(.,.dots = paste0(unlist(filter_var), " %in% '", unlist(filter_val), "'"))%>%
+                                                                              select_(.dots = values_var) %>% 
+                                                                              summarise_all(funs(sum))
+
+                                                      }
+
+
+
+                                                    dynamic_data <- reshape2::melt(dynamic_data, measure.vars = unlist(values_var))
 
                                                     # if no rows returned from the filtered selection (on click) display an overall pie chart
-                                                    ggplot(melted_data, aes(x="", y=value*2, fill=variable)) + 
+                                                    ggplot(dynamic_data, aes(x="", y=value*2, fill=variable)) + 
                                                     geom_bar(stat="identity", width=1, col = 'black') + coord_polar("y", start=0,clip = "on") + 
                                                     geom_text(aes(label = paste0(round(value,0), "%")), position = position_stack(vjust = 0.5)) +
                                                     scale_fill_manual( labels = c("Connected", "Waiting", "Paused", "Deassign"),
