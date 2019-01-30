@@ -55,6 +55,16 @@ melted_data <-  reshape2::melt(over_perf) %>% mutate_at(vars(value), funs(./ sum
 defaulter <- "Red"
 Ok <- "blue"
 
+group_var <-  list('SHIFT_TYPE','WEEK_DAY')
+filter_val <- list()
+values_var <- list('TOTAL_CONNECTED_IN_HRS',
+                     'TOTAL_WAITING_IN_HRS', 
+                     'TOTAL_PAUSED_IN_HRS', 
+                     'TOTAL_DEASSIGN_IN_HRS')
+select_var <- c(group_var,values_var)
+all_days <- c("Sunday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Monday")
+all_shifts <- c("Morning", "Afternoon", "Evening", "Night",) 
+
 server = function(input, output, session) {
   
   ######################################## START OF TAB TWO #######################################################
@@ -101,7 +111,20 @@ server = function(input, output, session) {
                               total_rows = nrow(data_react)
 
                               if (total_rows == 0) {
+                                                    
+                                                    if (input$daychoice != "All"){
+                                                        filter_val <-  list(c(input$daychoice))
+                                                    }
+                                                    else {
+                                                      filter_val <-  list(all_days)
+                                                    }
 
+                                                    if (input$shiftchoice != "All"){
+                                                        filter_val <- c(filter_val,list(input$shiftchoice))
+                                                    }
+                                                    else {
+                                                      filter_val <- c(filter_val,list(all_shifts))
+                                                    }
 
                                                     # if no rows returned from the filtered selection (on click) display an overall pie chart
                                                     ggplot(melted_data, aes(x="", y=value*2, fill=variable)) + 
@@ -136,8 +159,8 @@ server = function(input, output, session) {
                                                                             size = 2,
                                                                             fill = '#e6e8ed')) +
                                       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-                                      labs(x = '', y = 'WORK_HOURS') + labs(col = "Legend")  + 
-                                      scale_x_date(date_breaks = 'day', date_labels = '%b %d\n%a')
+                                      labs(x = '', y = 'WORK_HOURS') + labs(col = "Legend")  #+ 
+                                     # scale_x_date(date_breaks = 'day', date_labels = '%b %d\n%a')
 
                                  }
                             })

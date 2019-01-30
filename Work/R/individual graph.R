@@ -5,6 +5,7 @@ library(DT)
 library(reshape)
 library(viridis)
 library(wesanderson)
+library(RODBC)
 
 
 
@@ -101,6 +102,47 @@ ggplot(m, aes(x="", y=value, fill=variable)) + geom_bar(stat="identity", width=1
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
     theme(axis.text=element_blank())
 
+  KPI_perf_overall <- data_temp %>% 
+  select(SHIFT_TYPE,WEEK_DAY,AGENT_NAME,TOTAL_CONNECTED_IN_HRS,TOTAL_WAITING_IN_HRS, TOTAL_PAUSED_IN_HRS, TOTAL_DEASSIGN_IN_HRS)  %>%  
+  group_by(SHIFT_TYPE,WEEK_DAY,AGENT_NAME)  %>% summarise_all(funs(sum))
+  
+  #-----------------------------------------------------------------------------------------------------------------------
+  
+  
+  group_var <- list('SHIFT_TYPE')
+  values_var <- list('TOTAL_CONNECTED_IN_HRS',
+                     'TOTAL_WAITING_IN_HRS', 
+                     'TOTAL_PAUSED_IN_HRS', 
+                     'TOTAL_DEASSIGN_IN_HRS')
+  select_var <- c(group_var,values_var)
+  
+  filter_val <- c('Afternoon')
+  
+  
+  dynamic_data <- KPI_perf_overall %>% ungroup() %>%
+  select_(.dots = unlist(select_var)) %>%
+  group_by_(.dots = group_var) %>%
+  summarise_all(funs(sum)) %>%
+  filter_(.,.dots = paste0(group_var, "=='", filter_val, "'")) %>% ungroup() %>%
+  select_(.dots = values_var)
 
-sum(m$value)
-install.packages("wesanderson")
+  dynamic_data <- reshape2::melt(dynamic_data, measure.vars = unlist(values_var))
+
+
+  # if no rows returned from the filtered selection (on click) display an overall pie chart
+  ggplot(dynamic_data, aes(x="", y=value*2, fill=variable)) + 
+  geom_bar(stat="identity", width=1, col = 'black') + coord_polar("y", start=0,clip = "on") + 
+  geom_text(aes(label = paste0(round(value,0), "%")), position = position_stack(vjust = 0.5)) +
+  scale_fill_manual( labels = c("Connected", "Waiting", "Paused", "Deassign"),
+                     values = wes_palette(n=4, name="Darjeeling2"))  +       
+  theme_bw(base_size = 15)  +                                                    
+  labs(x = NULL, y = NULL, fill = NULL) + 
+  labs(col = "Legend")  +
+  theme(panel.background = element_rect(linetype = 1,
+                                        colour = 'black',
+                                        size = 2,
+                                        fill = '#e6e8ed')) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+  theme(axis.text=element_blank()) + 
+  theme(legend.position="bottom") 
+

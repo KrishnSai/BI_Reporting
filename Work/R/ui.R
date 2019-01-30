@@ -26,7 +26,7 @@ ui =
 
     # second tab displaying the weekly performance
     tabPanel(
-      "Reports",
+      "Weekly Report",
       br(),
 
       # row 1 : (5/1-5/1)
@@ -53,6 +53,7 @@ ui =
                         style = 'margin-bottom:30px;border:3px double; padding: 10px;',
                         offset = 1
                       )
+                
 
               ),
       
@@ -69,7 +70,32 @@ ui =
                 
                 # Search box to input employee name for bar plot generation
                 column(
-                        width = 5
+                        width = 5,
+                        selectInput( "daychoice",
+                                     "Choose Day",
+                                      choices =  c( "Sunday",
+                                                    "Monday",
+                                                    "Tuesday",
+                                                    "Wednesday",
+                                                    "Thursday",
+                                                    "Friday",
+                                                    "Saturday",
+                                                    "All"), 
+                                      selected = 'All', 
+                                      multiple = FALSE),
+                        
+                        selectInput( "shiftchoice",
+                                     "Choose Shift",
+                                      choices =  c( "Morning",
+                                                    "Afternoon",
+                                                    "Evening",
+                                                    "Night",
+                                                    "All"), 
+                                      selected = 'All', 
+                                      multiple = FALSE),
+                        
+                        offset = 1
+
                       )
                 )
 
