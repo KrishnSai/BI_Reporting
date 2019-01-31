@@ -1,30 +1,26 @@
 # import the libraries 
 library(shiny)
-library(RODBCext)
-library(shinythemes)
-library(RODBC)
-library(DT)
+
+# load the global variables
+source('common_references.R', local= F)
 
 # create the oracle connection 
 connHandle_1 <- odbcConnect("ORA_XE", uid = "SYSTEM", pwd = "1234")
 
-# fetch the unique employees from the database
-employee <-  sqlQuery(connHandle_1, "SELECT AGENT_NAME AS USERS FROM DIM_AGENT order by 1 asc")
-
-
 ui = 
   
+  tags$style(type="text/css",
+         ".shiny-output-error { visibility: hidden; }",
+         ".shiny-output-error:before { visibility: hidden; }")
+  
   # list the navigation bar with a shiny theme
-  navbarPage(    
+  navbarPage(
+    useShinyjs(),
     theme = shinytheme("spacelab"),
 
-    # first tab displaying the Title and the Date
-    tabPanel("Navbar 0", "Performance Dashboard",
-             paste0('- ', format(Sys.Date(), "%Y/%m/%d"))
-             ),
-
-    # second tab displaying the weekly performance
+    # Tab displaying the weekly performance
     tabPanel(
+      style = 'margin-bottom:30px;border:3px double; padding: 10px;',
       "Weekly Performance Report",
       br(),
 
@@ -34,26 +30,22 @@ ui =
                 # point plot to dislay the overall working hours of all the employees for each day
                 column(
                         5,
-                        h4("All Employees Weekly Performance"),
-                        br(),
+                        align="center",
                         # element 1
                         plotOutput("plot1", brush = brushOpts(id = "plot1_brush")),
-                        style = 'margin-bottom:30px;border:3px double; padding: 10px;',
+                        #style = 'margin-bottom:30px;border:3px double; padding: 10px;',
                         offset = 1
                         ),
 
                 # bar plot to display the employee wirking hours based on the selecion from the drop down
                 column(
                         4,    
-                        h4("Individual Performance"),
-                        br(),
+                        align="center",
                         # element 2
                         plotOutput("plot2"),
-                        style = 'margin-bottom:30px;border:3px double; padding: 10px;',
+                        #style = 'margin-bottom:30px;border:3px double; padding: 10px;',
                         offset = 1
                       )
-                
-
               ),
       
       # row 2 : (5/1-5/1)
@@ -62,6 +54,7 @@ ui =
                 # display the brush info from the point plots in a structured data table
                 column(
                         width = 5,
+                        align="center",
                         # element 3
                         DT::dataTableOutput("datatable_one"),
                         offset = 1
@@ -70,21 +63,21 @@ ui =
                 # Search box to input employee name for bar plot generation
                 column(
                         width = 5,
-                        selectInput( "daychoice",
-                                     "Choose Day",
-                                      choices =  c( "Sunday",
-                                                    "Monday",
-                                                    "Tuesday",
-                                                    "Wednesday",
-                                                    "Thursday",
-                                                    "Friday",
-                                                    "Saturday",
-                                                    "All"), 
-                                      selected = 'All', 
-                                      multiple = FALSE),
+                        lign="center",
+                        sliderTextInput(
+                                        inputId = "daychoice",
+                                          label = "Slide over Days",
+                                        choices = substr(c(days_present,"All"),1,3),   
+                                        selected = "All",
+                                        grid = T,
+                                        animationOptions(interval = 1000, 
+                                                         loop = FALSE, 
+                                                         playButton = icon("fas fa-angle-double-right", "fa-1x"), 
+                                                         pauseButton = icon("fas fa-pause", "fa-1x"))
+                                        ),
                         
-                        selectInput( "shiftchoice",
-                                     "Choose Shift",
+                        selectInput(  inputId = "shiftchoice",
+                                        label = "Choose Shift",
                                       choices =  c( "Morning",
                                                     "Afternoon",
                                                     "Night",
@@ -92,13 +85,13 @@ ui =
                                       selected = 'All', 
                                       multiple = FALSE),
                         
+                        plotOutput("plot3" ),
+                        
                         offset = 1
 
-                      )
+                      ) 
                 )
 
-              ),
-    
-    tabPanel("Search Employee", "TBD")
+              )
 
   )
