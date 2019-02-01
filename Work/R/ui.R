@@ -1,4 +1,6 @@
 #https://rstudio-pubs-static.s3.amazonaws.com/27777_55697c3a476640caa0ad2099fe914ae5.html#/6
+#http://rstudio.github.io/shiny/tutorial/#html-ui
+#https://shiny.rstudio.com/articles/html-tags.html
 
 # import the libraries 
 library(shiny)
@@ -19,20 +21,32 @@ ui =
   navbarPage(
 
     useShinyjs(),
-    theme = shinytheme("spacelab"),
+    theme = shinytheme("united"),
+
+    tabPanel("Home",
+     HTML('<div style="background-color:lightblue"><h3>This is a heading</h3><p>dateRangeInput("daterange3", "",
+                 start  = "2019-01-15",
+                 end    = "2019-01-31",
+                 min    = "2005-01-01",
+                 max    = "3000-12-21",
+                 format = "mm/dd/yy",
+                 separator = icon(class="far fa-arrow-alt-circle-right", "fa-1x"))</p></div>'), 
+     style =  "width: 60%;display: block; margin-left: auto;margin-right: auto;",
+     column(8,h1('Hello World'), offset = 2)    
+    ),
 
     # Tab displaying the weekly performance
     tabPanel(
       #HTML(paste("This text is ", tags$span(style="color:red", "red"), sep = "")),
-      style = 'margin-bottom:30px;border:3px double; padding: 10px;',
+      style = 'margin-bottom:30px;border:3px double; padding: 10px;text-align: Left',      
       "Weekly Performance Report",
-      dateRangeInput("daterange3", "Enter Date Range:",
-                 start  = "2001-01-01",
-                 end    = "2010-12-31",
-                 min    = "2001-01-01",
-                 max    = "2012-12-21",
+      dateRangeInput("daterange3", "",
+                 start  = "2019-01-15",
+                 end    = "2019-01-31",
+                 min    = "2005-01-01",
+                 max    = "3000-12-21",
                  format = "mm/dd/yy",
-                 separator = icon(class="far fa-arrow-alt-circle-right", "fa-1x")),
+                 separator = icon(class="far fa-arrow-alt-circle-right", "fa-1x")),align="center",
       br(),
 
 
@@ -70,7 +84,7 @@ ui =
                         offset = 1
                       ),
                 
-                # Search box to input employee name for bar plot generation
+                # Dropdown and pie chart for each employee 
                 column(
                         width = ind_flag,
                         align="center",

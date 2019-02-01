@@ -1,8 +1,3 @@
-
-library(svDialogs)
-milestone <- 7
-
-
 library(ggplot2)
 library(RODBCext)
 library(shinythemes)
@@ -15,7 +10,8 @@ library(reshape)
 library(viridis)
 library(wesanderson)
 library (plotly)
-library(svDialogs)
+library (shinyBS)
+
 
 # create the oracle connection 
 connHandle <- odbcConnect("ORA_XE", uid = "SYSTEM", pwd = "1234")
@@ -32,7 +28,7 @@ metaQuery <- paste("SELECT DA.AGENT_NAME,DW.WEEK_DAY,DS.SHIFT_TYPE,DF.CONTACT_DA
                                            DF.AGENT_ID =DA.AGENT_ID
                                        AND DS.SHIFT_ID=DF.SHIFT_ID
                                        AND DW.WEEK_ID = DF.WEEK_ID
-                                       AND DF.CONTACT_DATE >= TO_DATE(SYSDATE - ",milestone,", 'MM/DD/YYYY');")
+                                       AND DF.CONTACT_DATE >= TO_DATE(SYSDATE - ",7 ,", 'MM/DD/YYYY');")
 
 # fset the date format in the database query session
 querystring1 = "alter session set nls_date_format = 'mm/dd/yyyy'"

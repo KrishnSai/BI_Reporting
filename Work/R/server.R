@@ -19,9 +19,16 @@ all_shifts <- c("Morning", "Afternoon", "Night")
 
 
 server = function(input, output, session) {
+
+   observeEvent(input$navtab, {
+     shinyjs::toggleClass(selector = "body", class = "one",
+                 condition = (input$navtab == "Home"))
+
+     shinyjs::toggleClass(selector = "body", class = "two",
+                 condition = (input$navtab == "Weekly Performance Report"))
+   })
   
-  ######################################## START OF TAB TWO #######################################################
-  
+    
   # element 1
   output$plot1 <- renderPlot({
     
