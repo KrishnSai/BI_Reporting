@@ -36,7 +36,7 @@ server = function(input, output, session) {
                                                                             colour = 'black',
                                                                             size = 2,
                                                                             fill = '#e6e8ed')) +
-                                    labs(x = '', y = 'Hours') + labs(col = "") +
+                                    labs(x = '', y = '') + labs(col = "") +
                                     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())  +
                                     scale_x_date(date_breaks = 'day', date_labels = '%b %d\n%a') +
                                     theme(legend.position="bottom") + 
@@ -82,7 +82,7 @@ server = function(input, output, session) {
 
                               if (total_rows == 0) {
                                 
-                                                    ind_flag <<- 1
+                                                    ind_flag <<- 4
                                                     
                                                     # encode the day value with actual values
                                                     if (input$daychoice=="Sun") {day_val <- c("Sunday")}
@@ -165,7 +165,7 @@ server = function(input, output, session) {
                                                      }
                                 else{
                                   
-                                      ind_flag <<- 0
+                                      ind_flag <<- 5
                                       user <- paste0("Hours Worked by ",(input$datatable_one_cell_clicked)[3],' :')
 
                                       # ggplot to generate the barplot of performcance selected employee over the week
@@ -181,7 +181,7 @@ server = function(input, output, session) {
                                                                             size = 2,
                                                                             fill = '#e6e8ed')) +
                                       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-                                      labs(x = '', y = 'Hours') + labs(col = "Legend")  + 
+                                      labs(x = '', y = '') + labs(col = "Legend")  + 
                                       ggtitle(user)#+ 
                                      # scale_x_date(date_breaks = 'day', date_labels = '%b %d\n%a')
 
@@ -204,9 +204,9 @@ output$plot3 <- renderPlot({
  individual_data <- reshape2::melt(individual_data, measure.vars = unlist(values_var))
  individual_data <- individual_data %>%   mutate_at(vars(value), funs(./sum(value)*100)) 
  
- if (ind_flag == 0) {
+ if (ind_flag == 5) {
                                 
-                                user <- paste0("Performance of ",(input$datatable_one_cell_clicked)[3],' :')
+                                user <- paste0("Performance of ",(input$datatable_one_cell_clicked)[3],' :', ind_flag)
                                 
                                 # if no rows returned from the filtered selection (on click) display an overall pie chart
                                 ggplot(individual_data, aes(x="", y=value*2, fill=variable)) + 
@@ -223,7 +223,7 @@ output$plot3 <- renderPlot({
                                                                       fill = '#e6e8ed')) +
                                 theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
                                 theme(axis.text=element_blank()) + labs(x = '', y = '') +
-                                theme(legend.position="right") + ggtitle(user)
+                                theme(legend.position="bottom") + ggtitle(user)
    
                               }
 

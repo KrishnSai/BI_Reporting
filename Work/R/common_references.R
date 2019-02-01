@@ -1,6 +1,6 @@
 
 library(svDialogs)
-milestone <- dlgInput("Enter number of days to view data: ", 7)$res
+milestone <- 7
 
 
 library(ggplot2)
@@ -60,7 +60,7 @@ KPI_perf_overall <- data_temp %>%
   select(SHIFT_TYPE,WEEK_DAY,AGENT_NAME,TOTAL_CONNECTED_IN_HRS,TOTAL_WAITING_IN_HRS, TOTAL_PAUSED_IN_HRS, TOTAL_DEASSIGN_IN_HRS)  %>%  
   group_by(SHIFT_TYPE,WEEK_DAY,AGENT_NAME)  %>% summarise_all(funs(sum))
 
-ind_flag <- 1
+ind_flag <- 4
 #melted_data <-  reshape2::melt(over_perf) %>% mutate_at(vars(value), funs(./ sum(.)*100))
 
 close(connHandle)
