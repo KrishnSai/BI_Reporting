@@ -9,7 +9,7 @@ library(shiny)
 source('common_references.R', local= F)
 
 # create the oracle connection 
-connHandle_1 <- odbcConnect("ORA_XE", uid = "SYSTEM", pwd = "1234")
+connHandle_1 <- RODBC::odbcConnect("ORA_XE", uid = "SYSTEM", pwd = "1234")
 
 ui = 
   
@@ -22,18 +22,6 @@ ui =
 
     useShinyjs(),
     theme = shinytheme("united"),
-
-    tabPanel("Home",
-     HTML('<div style="background-color:lightblue"><h3>This is a heading</h3><p>dateRangeInput("daterange3", "",
-                 start  = "2019-01-15",
-                 end    = "2019-01-31",
-                 min    = "2005-01-01",
-                 max    = "3000-12-21",
-                 format = "mm/dd/yy",
-                 separator = icon(class="far fa-arrow-alt-circle-right", "fa-1x"))</p></div>'), 
-     style =  "width: 60%;display: block; margin-left: auto;margin-right: auto;",
-     column(8,h1('Hello World'), offset = 2)    
-    ),
 
     # Tab displaying the weekly performance
     tabPanel(
@@ -65,7 +53,7 @@ ui =
                 # bar plot to display the employee wirking hours based on the selecion from the drop down
                 column(
                         4,    
-                        align=align2_flag,
+                        align=ind_flag,
                         # element 2
                         plotOutput("plot2"),
                         offset = 1
