@@ -1,0 +1,103 @@
+  
+############################################
+################### START ##################
+############################################
+Agent Hours_2019.01.16.04.08.56.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.16.04.08.56.csvpreviously uploaded
+Agent Hours_2019.01.17.04.08.56.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.17.04.08.56.csvpreviously uploaded
+Agent Hours_2019.01.18.04.08.56.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.18.04.08.56.csvpreviously uploaded
+Agent Hours_2019.01.19.04.08.56.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.19.04.08.56.csvpreviously uploaded
+Agent Hours_2019.01.20.04.08.56.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.20.04.08.56.csvpreviously uploaded
+Agent Hours_2019.01.21.04.08.56.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.21.04.08.56.csvpreviously uploaded
+Agent Hours_2019.01.23.00.24.55.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.23.00.24.55.csvpreviously uploaded
+Agent Hours_2019.01.24.00.26.21.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.24.00.26.21.csvpreviously uploaded
+Agent Hours_2019.01.25.00.24.32.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.25.00.24.32.csvpreviously uploaded
+Agent Hours_2019.01.26.00.16.46.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.26.00.16.46.csvpreviously uploaded
+Agent Hours_2019.01.28.06.20.13.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.28.06.20.13.csvpreviously uploaded
+Agent Hours_2019.01.29.00.40.29.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.29.00.40.29.csvpreviously uploaded
+Agent Hours_2019.01.30.02.33.32.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.30.02.33.32.csvpreviously uploaded
+Agent Hours_2019.01.31.00.20.46.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.01.31.00.20.46.csvpreviously uploaded
+Agent Hours_2019.02.01.02.20.47.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.02.01.02.20.47.csvpreviously uploaded
+Agent Hours_2019.02.02.04.24.07.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.02.02.04.24.07.csvpreviously uploaded
+Agent Hours_2019.02.03.03.16.27.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.02.03.03.16.27.csvpreviously uploaded
+Agent Hours_2019.02.05.02.02.21.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.02.05.02.02.21.csvpreviously uploaded
+Agent Hours_2019.02.06.01.55.11.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.02.06.01.55.11.csvpreviously uploaded
+Agent Hours_2019.02.07.05.08.33.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.02.07.05.08.33.csvpreviously uploaded
+Agent Hours_2019.02.11.02.20.25.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.02.11.02.20.25.csvpreviously uploaded
+Agent Hours_2019.02.12.01.09.22.csv
+Query 1 Executed
+Query 2 Executed
+File:Agent Hours_2019.02.12.01.09.22.csvpreviously uploaded
+Agent Hours_2019.02.13.02.48.50.csv
+Query 1 Executed
+Query 2 Executed
+Query 3 Executed
+Query 4 Executed
+Total89rows were inserted to the table STAGING_NOBLE
+             
+############################################
+################### END ##################
+############################################
+SQL connection closed

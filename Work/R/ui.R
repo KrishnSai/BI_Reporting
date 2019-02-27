@@ -13,9 +13,7 @@ connHandle_1 <- RODBC::odbcConnect("ORA_XE", uid = "SYSTEM", pwd = "1234")
 
 ui = 
   
-  tags$style(type="text/css",
-         ".shiny-output-error { visibility: hidden; }",
-         ".shiny-output-error:before { visibility: hidden; }")
+
   
   # list the navigation bar with a shiny theme
   navbarPage(
@@ -28,7 +26,7 @@ ui =
       #HTML(paste("This text is ", tags$span(style="color:red", "red"), sep = "")),
       style = 'margin-bottom:30px;border:3px double; padding: 10px;text-align: Left',      
       "Weekly Performance Report",
-      dateRangeInput("daterange3", "",
+      dateRangeInput("range", "",
                  start  = "2019-01-15",
                  end    = "2019-01-31",
                  min    = "2005-01-01",
