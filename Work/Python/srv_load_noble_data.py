@@ -48,6 +48,8 @@ try:
 
     #logging script
     log_path = "../../logs/" if not args.log else args.log
+    if not os.path.isdir(log_path):
+        os.mkdir(log_path)
     now = datetime.datetime.now()
     date = now.strftime("%d_%m_%Y")
     logfile = 'log_'+date+'.txt' 
