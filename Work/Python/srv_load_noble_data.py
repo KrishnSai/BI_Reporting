@@ -27,6 +27,8 @@ parser.add_argument("-l", "--log",
                     help="path to directory containing log files (default: '../../log')")
 parser.add_argument("-d", "--data",
                     help="path to directory containing data files (default: '../../data')")
+parser.add_argument("--database",
+                    help="database address(default: 'system/1234@localhost:1521/xe')")
 args = parser.parse_args()
 
 status_flag = 'Started'
@@ -34,7 +36,8 @@ desc = "PARSE_NOBLE_DATA_JOB"
 
 
 #oracle connection details
-conn = ora.connect('system/1234@localhost:1521/xe')
+db_address = 'system/1234@localhost:1521/xe' if not args.database else args.database
+conn = ora.connect(db_address)
 cursor = conn.cursor()
 
 # insert into the job table
