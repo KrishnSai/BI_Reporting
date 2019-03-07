@@ -6,6 +6,7 @@ import plotly.graph_objs as go
 import datetime
 import cx_Oracle as ora
 import pandas as pd
+import numpy as np
 
 db_address = 'system/1234@localhost:1521/xe'
 connection = ora.connect(db_address)
@@ -89,10 +90,23 @@ def update_plot1(start_date, end_date):
         date1.strftime('%Y-%m-%d'),
         date2.strftime('%Y-%m-%d')
     )
+    defaulter_mask = list(left_data['TOTAL_SUMMARY_IN_HRS'] <= 8)
+    non_defaulter_mask = np.invert(defaulter_mask)
+    print(np.sum(defaulter_mask)+np.sum(non_defaulter_mask))
+    print(left_data.columns)
     return {
         'data': [go.Scatter(
-            x=left_data['CONTACT_DATE'],
-            y=left_data['TOTAL_SUMMARY_IN_HRS'],
+            x=left_data.loc[non_defaulter_mask, 'CONTACT_DATE'],
+            y=left_data.loc[non_defaulter_mask, 'TOTAL_SUMMARY_IN_HRS'],
+            text=left_data.loc[non_defaulter_mask, 'AGENT_NAME'],
+            name='Non-defaulters',
+            mode='markers'
+        ), go.Scatter(
+            x=left_data.loc[defaulter_mask, 'CONTACT_DATE'],
+            y=left_data.loc[defaulter_mask, 'TOTAL_SUMMARY_IN_HRS'],
+            text=left_data.loc[defaulter_mask, 'AGENT_NAME'],
+            fillcolor='rgb(255, 102, 0)',
+            name='Defaulters',
             mode='markers'
         )],
         'layout': go.Layout(title='')
