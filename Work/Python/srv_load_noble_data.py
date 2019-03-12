@@ -1,6 +1,6 @@
 """
-Description : Reads the NOBEL data from the excel and updates in the database tables
-STAGING_NOBLE, STAGING_FILES_READ, JOBS_SCHEDULE. The log of the script is found in
+Description : Reads the NOBEL data from the excel and updates in the database tables 
+STAGING_NOBLE, STAGING_FILES_READ, JOBS_SCHEDULE. The log of the script is found in 
 ./logs and the data is loaded in ./data.
 
 Author : Krishnendu Das
@@ -12,12 +12,26 @@ Version : 1.0
 Html : TBD
 
 """
-# importing the libraries
-import pandas as pd
-import os
+
+#importing the libraries
+import subprocess
+import os 
 import re
 import datetime
+import sys
+from argparse import ArgumentParser
+import pandas as pd
 import cx_Oracle  as ora
+
+parser = ArgumentParser(description='Utility script to load daily data into Oracle Database')
+parser.add_argument("-l", "--log",
+                    help="path to directory containing log files (default: '../../log')")
+parser.add_argument("-d", "--data",
+                    help="path to directory containing data files (default: '../../data')")
+parser.add_argument("--database",
+                    help="database address(default: 'system/1234@localhost:1521/xe')")
+args = parser.parse_args()
+parent of edbcd5b... reformatted srv_load_noble_data.py
 
 status_flag = 'Started'
 desc = "PARSE_NOBLE_DATA_JOB"
@@ -25,6 +39,9 @@ desc = "PARSE_NOBLE_DATA_JOB"
 
 #oracle connection details
 conn = ora.connect('system/1234@localhost:1521/xe')
+db_address = 'system/1234@localhost:1521/xe' if not args.database else args.database
+conn = ora.connect(db_address)
+ parent of edbcd5b... reformatted srv_load_noble_data.py
 cursor = conn.cursor()
 
 # insert into the job table
@@ -37,7 +54,10 @@ conn.commit()
 try:
 
     #logging script
-    log_path = "C:/Users/Jennifer/Documents/GitHub/BI_Reporting1/logs/" 
+    log_path = "../../logs/" if not args.log else args.log
+    if not os.path.isdir(log_path):
+        os.mkdir(log_path)
+ parent of edbcd5b... reformatted srv_load_noble_data.py
     now = datetime.datetime.now()
     date = now.strftime("%d_%m_%Y")
     logfile = 'log_'+date+'.txt' 
@@ -91,6 +111,7 @@ try:
             nobel_data = nobel_data.reset_index(drop=True)
 
             # query3
+
             querystring3 = "insert into STAGING_NOBLE (AGENT_NAME, \
                                                       CODE, \
                                                       CONTACT_DATE, \
@@ -103,7 +124,8 @@ try:
                                                       ACW, \
                                                       TOTAL, \
                                                       FILE_NAME) \
-                                        VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                                        VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%squerystring3 = "insert into STAGING_NOBLE (AGENT_NAME,                                                       CODE,                                                       CONTACT_DATE,                                                       LOGON_TIME,                                                       LOGOFF_TIME,                                                       CONNECTED,                                                       WAITING,                                                       PAUSED,                                                       DEASSIGN,                                                       ACW,                                                       TOTAL,                                                       FILE_NAME)                                         VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+
 
             # loop thourhg dataframe 
             for i in range(len(nobel_data)):
@@ -169,12 +191,12 @@ conn.commit()
 querystring1 = "alter session set nls_date_format = 'mm/dd/yyyy'"
 cursor.execute(querystring1)
 
-for i in reversed(range(1, 30)):
-    cursor.callproc("PR_POPULATE_DAILY_NOBEL_DATA", [i])
+for i in reversed(range(1,30)):
+    cursor.callproc("PR_POPULATE_DAILY_NOBEL_DATA",[i])
     cursor.callproc("PR_POPULATE_WEEKLY_NOBEL_DATA")
     cursor.callproc("PR_POPULATE_DAILY_FACT")
-    print("Processed sysdate - " + str(i))
-
+    print("Processed sysdate - "+ str(i))
+    
 cursor.close()
 conn.close()
 logging.close()
