@@ -31,7 +31,7 @@ parser.add_argument("-d", "--data",
 parser.add_argument("--database",
                     help="database address(default: 'system/1234@localhost:1521/xe')")
 args = parser.parse_args()
-parent of edbcd5b... reformatted srv_load_noble_data.py
+
 
 status_flag = 'Started'
 desc = "PARSE_NOBLE_DATA_JOB"
@@ -39,9 +39,9 @@ desc = "PARSE_NOBLE_DATA_JOB"
 
 #oracle connection details
 conn = ora.connect('system/1234@localhost:1521/xe')
+
 db_address = 'system/1234@localhost:1521/xe' if not args.database else args.database
 conn = ora.connect(db_address)
- parent of edbcd5b... reformatted srv_load_noble_data.py
 cursor = conn.cursor()
 
 # insert into the job table
@@ -57,7 +57,6 @@ try:
     log_path = "../../logs/" if not args.log else args.log
     if not os.path.isdir(log_path):
         os.mkdir(log_path)
- parent of edbcd5b... reformatted srv_load_noble_data.py
     now = datetime.datetime.now()
     date = now.strftime("%d_%m_%Y")
     logfile = 'log_'+date+'.txt' 
@@ -112,6 +111,7 @@ try:
 
             # query3
 
+
             querystring3 = "insert into STAGING_NOBLE (AGENT_NAME, \
                                                       CODE, \
                                                       CONTACT_DATE, \
@@ -124,7 +124,7 @@ try:
                                                       ACW, \
                                                       TOTAL, \
                                                       FILE_NAME) \
-                                        VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%squerystring3 = "insert into STAGING_NOBLE (AGENT_NAME,                                                       CODE,                                                       CONTACT_DATE,                                                       LOGON_TIME,                                                       LOGOFF_TIME,                                                       CONNECTED,                                                       WAITING,                                                       PAUSED,                                                       DEASSIGN,                                                       ACW,                                                       TOTAL,                                                       FILE_NAME)                                         VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                                        VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%squerystring3 = "insert into STAGING_NOBLE (AGENT_NAME,                                                       CODE,                                                       CONTACT_DATE,                                                       LOGON_TIME,                                                       LOGOFF_TIME,                                                       CONNECTED,                                                       WAITING,                                                       PAUSED,                                                       DEASSIGN,                                                       ACW,                                                       TOTAL,                                                       FILE_NAME)                                         VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%squerystring3 = "insert into STAGING_NOBLE (AGENT_NAME,                                                       CODE,                                                       CONTACT_DATE,                                                       LOGON_TIME,                                                       LOGOFF_TIME,                                                       CONNECTED,                                                       WAITING,                                                       PAUSED,                                                       DEASSIGN,                                                       ACW,                                                       TOTAL,                                                       FILE_NAME)                                         VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
 
 
             # loop thourhg dataframe 
