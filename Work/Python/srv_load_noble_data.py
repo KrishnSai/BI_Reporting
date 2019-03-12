@@ -36,7 +36,7 @@ desc = "PARSE_NOBLE_DATA_JOB"
 
 
 #oracle connection details
-conn = ora.connect('system/1234@localhost:1521/xe')
+
 
 db_address = 'system/1234@localhost:1521/xe' if not args.database else args.database
 conn = ora.connect(db_address)
@@ -57,25 +57,25 @@ try:
         os.mkdir(log_path)
     now = datetime.datetime.now()
     date = now.strftime("%d_%m_%Y")
-    logfile = 'log_'+date+'.txt' 
+    logfile = 'log_' +date+ '.txt' 
     logs = os.listdir(log_path)
     
     # create the log file
     if logfile not in logs:
-        logging = open(log_path+logfile, 'w')
+        logging = open(log_path + logfile, 'w')
     else:
-        logging = open(log_path+logfile, 'a')
+        logging = open(log_path + logfile, 'a')
 
     logging.write("  \n")
     logging.write("############################################\n")
     logging.write("################### START ##################\n")
     logging.write("############################################\n")
 
-    path = "C:/Users/Jennifer/Documents/GitHub/BI_Reporting1/data/" 
+   path = "C:/Users/Jennifer/Documents/GitHub/BI_Reporting1/data/" if not args.data else args.data
     files = os.listdir(path)
  
     for f in files:
-        print(f,file=logging)
+        print(f, file=logging)
 
         # query1
         querystring1 = "alter session set nls_date_format = 'mm/dd/yyyy'"
@@ -88,9 +88,9 @@ try:
         logging.write("Query 2 Executed\n")
         files_arx = re.sub('[^0-9a-zA-Z._,]+', '', str(cursor.fetchall()))[:-1].split(',,')
 
-        if f.replace(' ','') not in files_arx:
+        if f.replace(' ', '') not in files_arx:
             # read the csv files
-            nobel_data = pd.read_csv(path+f, names =("Agent Hours",
+            nobel_data = pd.read_csv(path+ f, names =("Agent Hours",
                                                      "col1","col2",
                                                      "col3", "col4",
                                                      "col5","col6",
@@ -110,20 +110,7 @@ try:
             # query3
 
 
-            querystring3 = "insert into STAGING_NOBLE (AGENT_NAME, \
-                                                      CODE, \
-                                                      CONTACT_DATE, \
-                                                      LOGON_TIME, \
-                                                      LOGOFF_TIME, \
-                                                      CONNECTED, \
-                                                      WAITING, \
-                                                      PAUSED, \
-                                                      DEASSIGN, \
-                                                      ACW, \
-                                                      TOTAL, \
-                                                      FILE_NAME) \
-                                        VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%squerystring3 = "insert into STAGING_NOBLE (AGENT_NAME,CODE,CONTACT_DATE,LOGON_TIME,LOGOFF_TIME,CONNECTED,WAITING,PAUSED,DEASSIGN,ACW,TOTAL,FILE_NAME) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-
+           querystring3 = "insert into STAGING_NOBLE (AGENT_NAME,CODE,CONTACT_DATE,LOGON_TIME,LOGOFF_TIME,CONNECTED,WAITING,PAUSED,DEASSIGN,ACW,TOTAL,FILE_NAME) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
 
             # loop thourhg dataframe 
             for i in range(len(nobel_data)):
@@ -163,7 +150,7 @@ try:
 
         else:
 
-            logging.write('File:'+str(f)+'previously uploaded\n')
+            logging.write('File:' +str(f)+ 'previously uploaded\n')
 
     logging.write("############################################\n")
     logging.write("################### END ##################\n")
