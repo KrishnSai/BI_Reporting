@@ -37,12 +37,9 @@ desc = "PARSE_NOBLE_DATA_JOB"
 
 #oracle connection details
 conn = ora.connect('system/1234@localhost:1521/xe')
-<<<<<<< HEAD
 
 db_address = 'system/1234@localhost:1521/xe' if not args.database else args.database
 conn = ora.connect(db_address)
-=======
->>>>>>> parent of 17612bd... Update srv_load_noble_data.py
 cursor = conn.cursor()
 
 # insert into the job table
@@ -125,7 +122,7 @@ try:
                                                       ACW, \
                                                       TOTAL, \
                                                       FILE_NAME) \
-                                        VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%squerystring3 = "insert into STAGING_NOBLE (AGENT_NAME,                                                       CODE,                                                       CONTACT_DATE,                                                       LOGON_TIME,                                                       LOGOFF_TIME,                                                       CONNECTED,                                                       WAITING,                                                       PAUSED,                                                       DEASSIGN,                                                       ACW,                                                       TOTAL,                                                       FILE_NAME)                                         VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%squerystring3 = "insert into STAGING_NOBLE (AGENT_NAME,                                                       CODE,                                                       CONTACT_DATE,                                                       LOGON_TIME,                                                       LOGOFF_TIME,                                                       CONNECTED,                                                       WAITING,                                                       PAUSED,                                                       DEASSIGN,                                                       ACW,                                                       TOTAL,                                                       FILE_NAME)                                         VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                                        VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%squerystring3 = "insert into STAGING_NOBLE (AGENT_NAME,CODE,CONTACT_DATE,LOGON_TIME,LOGOFF_TIME,CONNECTED,WAITING,PAUSED,DEASSIGN,ACW,TOTAL,FILE_NAME) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
 
 
             # loop thourhg dataframe 
