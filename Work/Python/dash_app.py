@@ -52,7 +52,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(children=[
-    html.H4(children='Weekly performance report'),
+    html.H4(children='Global Travel Xperts'),
     html.Div(children=[
         # Left pane
         html.Div(children=[
@@ -92,8 +92,6 @@ def update_plot1(start_date, end_date):
     )
     defaulter_mask = list(left_data['TOTAL_SUMMARY_IN_HRS'] <= 8)
     non_defaulter_mask = np.invert(defaulter_mask)
-    print(np.sum(defaulter_mask)+np.sum(non_defaulter_mask))
-    print(left_data.columns)
     return {
         'data': [go.Scatter(
             x=left_data.loc[non_defaulter_mask, 'CONTACT_DATE'],
@@ -109,7 +107,7 @@ def update_plot1(start_date, end_date):
             name='Defaulters',
             mode='markers'
         )],
-        'layout': go.Layout(title='')
+        'layout': go.Layout(title='Performance report')
     }
 
 
