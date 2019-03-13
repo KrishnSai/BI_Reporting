@@ -2,7 +2,6 @@
 Description : Reads the NOBEL data from the excel and updates in the
 database tables STAGING_NOBLE, STAGING_FILES_READ, JOBS_SCHEDULE. The
 log of the script is found in ./logs and the data is loaded in ./data.
-Author : Krishnendu Das
 Date : 21-01-2019
 Version : 1.0
 Html : TBD
